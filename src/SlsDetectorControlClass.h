@@ -24,12 +24,11 @@
 //        (Program Obviously used to Generate tango Object)
 //=============================================================================
 
-
 #ifndef SlsDetectorControlClass_H
 #define SlsDetectorControlClass_H
 
-#include <tango/tango.h>
 #include "SlsDetectorControl.h"
+#include <tango/tango.h>
 
 /* clang-format off */
 /*----- PROTECTED REGION END -----*/	//	SlsDetectorControlClass.h
@@ -807,9 +806,9 @@ class SlsDetectorControlClass : public Tango::DeviceClass
 #endif
 {
 	/*----- PROTECTED REGION ID(SlsDetectorControlClass::Additional DServer data members) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControlClass::Additional DServer data members
 
 	public:

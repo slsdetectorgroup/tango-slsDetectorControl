@@ -1,10 +1,12 @@
-/*----- PROTECTED REGION ID(SlsDetectorControl::DynAttrUtils.cpp) ENABLED START -----*/
+/*----- PROTECTED REGION ID(SlsDetectorControl::DynAttrUtils.cpp) ENABLED START
+ * -----*/
 /* clang-format on */
 //=============================================================================
 //
 // file :        SlsDetectorControlDynAttrUtils.cpp
 //
-// description : Dynamic attributes utilities file for the SlsDetectorControl class
+// description : Dynamic attributes utilities file for the SlsDetectorControl
+// class
 //
 // project :     tango-slsdetectorcontrol
 //
@@ -20,9 +22,9 @@
 //        (Program Obviously used to Generate tango Object)
 //=============================================================================
 
-
 #include "SlsDetectorControl.h"
 #include "SlsDetectorControlClass.h"
+
 /* clang-format off */
 /*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::DynAttrUtils.cpp
 
@@ -93,9 +95,9 @@ void SlsDetectorControl::add_adc_phase_dynamic_attribute(std::string attname)
 	//	delta_t	not set for adc_phase
 	//	delta_val	not set for adc_phase
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_adc_phase_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_adc_phase_dynamic_attribute
 	adc_phase->set_default_properties(adc_phase_prop);
 	//	Not Polled
@@ -118,9 +120,9 @@ void SlsDetectorControl::remove_adc_phase_dynamic_attribute(std::string attname)
 	if ((ite=adc_phase_data.find(attname))!=adc_phase_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_adc_phase_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_adc_phase_dynamic_attribute
 		adc_phase_data.erase(ite);
 	}
@@ -152,9 +154,9 @@ void SlsDetectorControl::add_delay_after_trigger_dynamic_attribute(std::string a
 	//	delta_t	not set for delay_after_trigger
 	//	delta_val	not set for delay_after_trigger
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_delay_after_trigger_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_delay_after_trigger_dynamic_attribute
 	delay_after_trigger->set_default_properties(delay_after_trigger_prop);
 	//	Not Polled
@@ -177,9 +179,9 @@ void SlsDetectorControl::remove_delay_after_trigger_dynamic_attribute(std::strin
 	if ((ite=delay_after_trigger_data.find(attname))!=delay_after_trigger_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_delay_after_trigger_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_delay_after_trigger_dynamic_attribute
 		delay_after_trigger_data.erase(ite);
 	}
@@ -211,10 +213,10 @@ void SlsDetectorControl::add_detector_setting_dynamic_attribute(std::string attn
 	//	delta_t	not set for detector_setting
 	//	delta_val	not set for detector_setting
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_detector_setting_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	// detector_setting_prop.set_enum_labels(settingsListLabels);
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    // detector_setting_prop.set_enum_labels(settingsListLabels);
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_detector_setting_dynamic_attribute
 	detector_setting->set_default_properties(detector_setting_prop);
 	//	Not Polled
@@ -237,9 +239,9 @@ void SlsDetectorControl::remove_detector_setting_dynamic_attribute(std::string a
 	if ((ite=detector_setting_data.find(attname))!=detector_setting_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_detector_setting_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_detector_setting_dynamic_attribute
 		detector_setting_data.erase(ite);
 	}
@@ -271,9 +273,9 @@ void SlsDetectorControl::add_num_frames_left_dynamic_attribute(std::string attna
 	//	delta_t	not set for num_frames_left
 	//	delta_val	not set for num_frames_left
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_num_frames_left_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_num_frames_left_dynamic_attribute
 	num_frames_left->set_default_properties(num_frames_left_prop);
 	//	Not Polled
@@ -296,9 +298,9 @@ void SlsDetectorControl::remove_num_frames_left_dynamic_attribute(std::string at
 	if ((ite=num_frames_left_data.find(attname))!=num_frames_left_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_num_frames_left_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_num_frames_left_dynamic_attribute
 		num_frames_left_data.erase(ite);
 	}
@@ -330,9 +332,9 @@ void SlsDetectorControl::add_num_triggers_left_dynamic_attribute(std::string att
 	//	delta_t	not set for num_triggers_left
 	//	delta_val	not set for num_triggers_left
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_num_triggers_left_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_num_triggers_left_dynamic_attribute
 	num_triggers_left->set_default_properties(num_triggers_left_prop);
 	//	Not Polled
@@ -355,9 +357,9 @@ void SlsDetectorControl::remove_num_triggers_left_dynamic_attribute(std::string 
 	if ((ite=num_triggers_left_data.find(attname))!=num_triggers_left_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_num_triggers_left_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_num_triggers_left_dynamic_attribute
 		num_triggers_left_data.erase(ite);
 	}
@@ -389,9 +391,9 @@ void SlsDetectorControl::add_power_chip_dynamic_attribute(std::string attname)
 	//	delta_t	not set for power_chip
 	//	delta_val	not set for power_chip
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_power_chip_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_power_chip_dynamic_attribute
 	power_chip->set_default_properties(power_chip_prop);
 	//	Not Polled
@@ -414,9 +416,9 @@ void SlsDetectorControl::remove_power_chip_dynamic_attribute(std::string attname
 	if ((ite=power_chip_data.find(attname))!=power_chip_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_power_chip_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_power_chip_dynamic_attribute
 		power_chip_data.erase(ite);
 	}
@@ -448,9 +450,9 @@ void SlsDetectorControl::add_readout_speed_dynamic_attribute(std::string attname
 	//	delta_t	not set for readout_speed
 	//	delta_val	not set for readout_speed
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_readout_speed_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_readout_speed_dynamic_attribute
 	readout_speed->set_default_properties(readout_speed_prop);
 	//	Not Polled
@@ -473,9 +475,9 @@ void SlsDetectorControl::remove_readout_speed_dynamic_attribute(std::string attn
 	if ((ite=readout_speed_data.find(attname))!=readout_speed_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_readout_speed_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_readout_speed_dynamic_attribute
 		readout_speed_data.erase(ite);
 	}
@@ -507,9 +509,9 @@ void SlsDetectorControl::add_temperature_10ge_dynamic_attribute(std::string attn
 	//	delta_t	not set for temperature_10ge
 	//	delta_val	not set for temperature_10ge
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_temperature_10ge_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_temperature_10ge_dynamic_attribute
 	temperature_10ge->set_default_properties(temperature_10ge_prop);
 	//	Not Polled
@@ -532,9 +534,9 @@ void SlsDetectorControl::remove_temperature_10ge_dynamic_attribute(std::string a
 	if ((ite=temperature_10ge_data.find(attname))!=temperature_10ge_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_temperature_10ge_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_temperature_10ge_dynamic_attribute
 		temperature_10ge_data.erase(ite);
 	}
@@ -566,9 +568,9 @@ void SlsDetectorControl::add_temperature_adc_dynamic_attribute(std::string attna
 	//	delta_t	not set for temperature_adc
 	//	delta_val	not set for temperature_adc
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_temperature_adc_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_temperature_adc_dynamic_attribute
 	temperature_adc->set_default_properties(temperature_adc_prop);
 	//	Not Polled
@@ -591,9 +593,9 @@ void SlsDetectorControl::remove_temperature_adc_dynamic_attribute(std::string at
 	if ((ite=temperature_adc_data.find(attname))!=temperature_adc_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_temperature_adc_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_temperature_adc_dynamic_attribute
 		temperature_adc_data.erase(ite);
 	}
@@ -625,9 +627,9 @@ void SlsDetectorControl::add_temperature_dcdc_dynamic_attribute(std::string attn
 	//	delta_t	not set for temperature_dcdc
 	//	delta_val	not set for temperature_dcdc
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_temperature_dcdc_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_temperature_dcdc_dynamic_attribute
 	temperature_dcdc->set_default_properties(temperature_dcdc_prop);
 	//	Not Polled
@@ -650,9 +652,9 @@ void SlsDetectorControl::remove_temperature_dcdc_dynamic_attribute(std::string a
 	if ((ite=temperature_dcdc_data.find(attname))!=temperature_dcdc_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_temperature_dcdc_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_temperature_dcdc_dynamic_attribute
 		temperature_dcdc_data.erase(ite);
 	}
@@ -684,9 +686,9 @@ void SlsDetectorControl::add_temperature_fpga2_dynamic_attribute(std::string att
 	//	delta_t	not set for temperature_fpga2
 	//	delta_val	not set for temperature_fpga2
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_temperature_fpga2_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_temperature_fpga2_dynamic_attribute
 	temperature_fpga2->set_default_properties(temperature_fpga2_prop);
 	//	Not Polled
@@ -709,9 +711,9 @@ void SlsDetectorControl::remove_temperature_fpga2_dynamic_attribute(std::string 
 	if ((ite=temperature_fpga2_data.find(attname))!=temperature_fpga2_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_temperature_fpga2_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_temperature_fpga2_dynamic_attribute
 		temperature_fpga2_data.erase(ite);
 	}
@@ -743,9 +745,9 @@ void SlsDetectorControl::add_temperature_fpga3_dynamic_attribute(std::string att
 	//	delta_t	not set for temperature_fpga3
 	//	delta_val	not set for temperature_fpga3
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_temperature_fpga3_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_temperature_fpga3_dynamic_attribute
 	temperature_fpga3->set_default_properties(temperature_fpga3_prop);
 	//	Not Polled
@@ -768,9 +770,9 @@ void SlsDetectorControl::remove_temperature_fpga3_dynamic_attribute(std::string 
 	if ((ite=temperature_fpga3_data.find(attname))!=temperature_fpga3_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_temperature_fpga3_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_temperature_fpga3_dynamic_attribute
 		temperature_fpga3_data.erase(ite);
 	}
@@ -802,9 +804,9 @@ void SlsDetectorControl::add_temperature_fpgaext_dynamic_attribute(std::string a
 	//	delta_t	not set for temperature_fpgaext
 	//	delta_val	not set for temperature_fpgaext
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_temperature_fpgaext_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_temperature_fpgaext_dynamic_attribute
 	temperature_fpgaext->set_default_properties(temperature_fpgaext_prop);
 	//	Not Polled
@@ -827,9 +829,9 @@ void SlsDetectorControl::remove_temperature_fpgaext_dynamic_attribute(std::strin
 	if ((ite=temperature_fpgaext_data.find(attname))!=temperature_fpgaext_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_temperature_fpgaext_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_temperature_fpgaext_dynamic_attribute
 		temperature_fpgaext_data.erase(ite);
 	}
@@ -861,9 +863,9 @@ void SlsDetectorControl::add_temperature_sodl_dynamic_attribute(std::string attn
 	//	delta_t	not set for temperature_sodl
 	//	delta_val	not set for temperature_sodl
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_temperature_sodl_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_temperature_sodl_dynamic_attribute
 	temperature_sodl->set_default_properties(temperature_sodl_prop);
 	//	Not Polled
@@ -886,9 +888,9 @@ void SlsDetectorControl::remove_temperature_sodl_dynamic_attribute(std::string a
 	if ((ite=temperature_sodl_data.find(attname))!=temperature_sodl_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_temperature_sodl_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_temperature_sodl_dynamic_attribute
 		temperature_sodl_data.erase(ite);
 	}
@@ -920,9 +922,9 @@ void SlsDetectorControl::add_temperature_sodr_dynamic_attribute(std::string attn
 	//	delta_t	not set for temperature_sodr
 	//	delta_val	not set for temperature_sodr
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_temperature_sodr_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_temperature_sodr_dynamic_attribute
 	temperature_sodr->set_default_properties(temperature_sodr_prop);
 	//	Not Polled
@@ -945,9 +947,9 @@ void SlsDetectorControl::remove_temperature_sodr_dynamic_attribute(std::string a
 	if ((ite=temperature_sodr_data.find(attname))!=temperature_sodr_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_temperature_sodr_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_temperature_sodr_dynamic_attribute
 		temperature_sodr_data.erase(ite);
 	}
@@ -979,9 +981,9 @@ void SlsDetectorControl::add_tengiga_dynamic_attribute(std::string attname)
 	//	delta_t	not set for tengiga
 	//	delta_val	not set for tengiga
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_tengiga_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_tengiga_dynamic_attribute
 	tengiga->set_default_properties(tengiga_prop);
 	//	Not Polled
@@ -1004,9 +1006,9 @@ void SlsDetectorControl::remove_tengiga_dynamic_attribute(std::string attname)
 	if ((ite=tengiga_data.find(attname))!=tengiga_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_tengiga_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_tengiga_dynamic_attribute
 		tengiga_data.erase(ite);
 	}
@@ -1038,9 +1040,9 @@ void SlsDetectorControl::add_timing_mode_dynamic_attribute(std::string attname)
 	//	delta_t	not set for timing_mode
 	//	delta_val	not set for timing_mode
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_timing_mode_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_timing_mode_dynamic_attribute
 	timing_mode->set_default_properties(timing_mode_prop);
 	//	Not Polled
@@ -1063,9 +1065,9 @@ void SlsDetectorControl::remove_timing_mode_dynamic_attribute(std::string attnam
 	if ((ite=timing_mode_data.find(attname))!=timing_mode_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_timing_mode_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_timing_mode_dynamic_attribute
 		timing_mode_data.erase(ite);
 	}
@@ -1101,9 +1103,9 @@ void SlsDetectorControl::add_threshold_energy_dynamic_attribute(std::string attn
 	//	delta_t	not set for threshold_energy
 	//	delta_val	not set for threshold_energy
 	/*----- PROTECTED REGION ID(SlsDetectorControl::att_threshold_energy_dynamic_attribute) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_threshold_energy_dynamic_attribute
 	threshold_energy->set_default_properties(threshold_energy_prop);
 	//	Not Polled
@@ -1127,9 +1129,9 @@ void SlsDetectorControl::remove_threshold_energy_dynamic_attribute(std::string a
 	if ((ite=threshold_energy_data.find(attname))!=threshold_energy_data.end())
 	{
 		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_threshold_energy_dynamic_attribute) ENABLED START -----*/
-		/* clang-format on */
-		//	Add your own code
-		/* clang-format off */
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_threshold_energy_dynamic_attribute
 		if (free_it)
 			delete[] ite->second;

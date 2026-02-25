@@ -1,4 +1,5 @@
-/*----- PROTECTED REGION ID(SlsDetectorControl::ClassFactory.cpp) ENABLED START -----*/
+/*----- PROTECTED REGION ID(SlsDetectorControl::ClassFactory.cpp) ENABLED START
+ * -----*/
 /* clang-format on */
 //=============================================================================
 //
@@ -23,20 +24,21 @@
 //        (Program Obviously used to Generate tango Object)
 //=============================================================================
 
-#include <tango/tango.h>
 #include "SlsDetectorControlClass.h"
+#include <tango/tango.h>
 
 //	Add class header files if needed
 
-
 /**
- *	Create SlsDetectorControl Class singleton and store it in DServer object.
+ *	Create SlsDetectorControl Class singleton and store it in DServer
+ * object.
  */
 
 void Tango::DServer::class_factory()
 {
-	//	Add method class init if needed
-	add_class(SlsDetectorControl_ns::SlsDetectorControlClass::init("SlsDetectorControl"));
+    //	Add method class init if needed
+    add_class(SlsDetectorControl_ns::SlsDetectorControlClass::init("SlsDetectorControl"));
 }
+
 /* clang-format off */
 /*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::ClassFactory.cpp

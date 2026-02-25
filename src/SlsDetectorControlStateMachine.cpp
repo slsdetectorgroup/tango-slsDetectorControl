@@ -1,4 +1,5 @@
-/*----- PROTECTED REGION ID(SlsDetectorControlStateMachine.cpp) ENABLED START -----*/
+/*----- PROTECTED REGION ID(SlsDetectorControlStateMachine.cpp) ENABLED START
+ * -----*/
 /* clang-format on */
 //=============================================================================
 //
@@ -50,14 +51,14 @@ bool SlsDetectorControl::is_acquisition_index_allowed(TANGO_UNUSED(Tango::AttReq
 {
 	//	Not any excluded states for acquisition_index attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::acquisition_indexStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::acquisition_indexStateAllowed_WRITE
 
 	//	Not any excluded states for acquisition_index attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::acquisition_indexStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::acquisition_indexStateAllowed_READ
 	return true;
 }
@@ -73,8 +74,8 @@ bool SlsDetectorControl::is_detector_type_allowed(TANGO_UNUSED(Tango::AttReqType
 
 	//	Not any excluded states for detector_type attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::detector_typeStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::detector_typeStateAllowed_READ
 	return true;
 }
@@ -89,14 +90,14 @@ bool SlsDetectorControl::is_dynamic_range_allowed(TANGO_UNUSED(Tango::AttReqType
 {
 	//	Not any excluded states for dynamic_range attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::dynamic_rangeStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::dynamic_rangeStateAllowed_WRITE
 
 	//	Not any excluded states for dynamic_range attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::dynamic_rangeStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::dynamic_rangeStateAllowed_READ
 	return true;
 }
@@ -111,14 +112,14 @@ bool SlsDetectorControl::is_exptime_allowed(TANGO_UNUSED(Tango::AttReqType type)
 {
 	//	Not any excluded states for exptime attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::exptimeStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::exptimeStateAllowed_WRITE
 
 	//	Not any excluded states for exptime attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::exptimeStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::exptimeStateAllowed_READ
 	return true;
 }
@@ -133,14 +134,14 @@ bool SlsDetectorControl::is_file_name_allowed(TANGO_UNUSED(Tango::AttReqType typ
 {
 	//	Not any excluded states for file_name attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::file_nameStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::file_nameStateAllowed_WRITE
 
 	//	Not any excluded states for file_name attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::file_nameStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::file_nameStateAllowed_READ
 	return true;
 }
@@ -155,14 +156,14 @@ bool SlsDetectorControl::is_file_name_prefix_allowed(TANGO_UNUSED(Tango::AttReqT
 {
 	//	Not any excluded states for file_name_prefix attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::file_name_prefixStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::file_name_prefixStateAllowed_WRITE
 
 	//	Not any excluded states for file_name_prefix attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::file_name_prefixStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::file_name_prefixStateAllowed_READ
 	return true;
 }
@@ -177,14 +178,14 @@ bool SlsDetectorControl::is_file_overwrite_allowed(TANGO_UNUSED(Tango::AttReqTyp
 {
 	//	Not any excluded states for file_overwrite attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::file_overwriteStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::file_overwriteStateAllowed_WRITE
 
 	//	Not any excluded states for file_overwrite attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::file_overwriteStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::file_overwriteStateAllowed_READ
 	return true;
 }
@@ -199,14 +200,14 @@ bool SlsDetectorControl::is_file_path_allowed(TANGO_UNUSED(Tango::AttReqType typ
 {
 	//	Not any excluded states for file_path attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::file_pathStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::file_pathStateAllowed_WRITE
 
 	//	Not any excluded states for file_path attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::file_pathStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::file_pathStateAllowed_READ
 	return true;
 }
@@ -221,14 +222,14 @@ bool SlsDetectorControl::is_file_write_allowed(TANGO_UNUSED(Tango::AttReqType ty
 {
 	//	Not any excluded states for file_write attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::file_writeStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::file_writeStateAllowed_WRITE
 
 	//	Not any excluded states for file_write attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::file_writeStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::file_writeStateAllowed_READ
 	return true;
 }
@@ -244,8 +245,8 @@ bool SlsDetectorControl::is_firmware_version_allowed(TANGO_UNUSED(Tango::AttReqT
 
 	//	Not any excluded states for firmware_version attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::firmware_versionStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::firmware_versionStateAllowed_READ
 	return true;
 }
@@ -261,8 +262,8 @@ bool SlsDetectorControl::is_full_file_name_allowed(TANGO_UNUSED(Tango::AttReqTyp
 
 	//	Not any excluded states for full_file_name attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::full_file_nameStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::full_file_nameStateAllowed_READ
 	return true;
 }
@@ -277,14 +278,14 @@ bool SlsDetectorControl::is_high_voltage_allowed(TANGO_UNUSED(Tango::AttReqType 
 {
 	//	Not any excluded states for high_voltage attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::high_voltageStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::high_voltageStateAllowed_WRITE
 
 	//	Not any excluded states for high_voltage attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::high_voltageStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::high_voltageStateAllowed_READ
 	return true;
 }
@@ -300,8 +301,8 @@ bool SlsDetectorControl::is_hostname_allowed(TANGO_UNUSED(Tango::AttReqType type
 
 	//	Not any excluded states for hostname attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::hostnameStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::hostnameStateAllowed_READ
 	return true;
 }
@@ -316,14 +317,14 @@ bool SlsDetectorControl::is_master_file_write_allowed(TANGO_UNUSED(Tango::AttReq
 {
 	//	Not any excluded states for master_file_write attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::master_file_writeStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::master_file_writeStateAllowed_WRITE
 
 	//	Not any excluded states for master_file_write attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::master_file_writeStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::master_file_writeStateAllowed_READ
 	return true;
 }
@@ -338,14 +339,14 @@ bool SlsDetectorControl::is_num_frames_allowed(TANGO_UNUSED(Tango::AttReqType ty
 {
 	//	Not any excluded states for num_frames attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::num_framesStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::num_framesStateAllowed_WRITE
 
 	//	Not any excluded states for num_frames attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::num_framesStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::num_framesStateAllowed_READ
 	return true;
 }
@@ -360,14 +361,14 @@ bool SlsDetectorControl::is_num_frames_per_file_allowed(TANGO_UNUSED(Tango::AttR
 {
 	//	Not any excluded states for num_frames_per_file attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::num_frames_per_fileStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::num_frames_per_fileStateAllowed_WRITE
 
 	//	Not any excluded states for num_frames_per_file attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::num_frames_per_fileStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::num_frames_per_fileStateAllowed_READ
 	return true;
 }
@@ -382,14 +383,14 @@ bool SlsDetectorControl::is_num_triggers_allowed(TANGO_UNUSED(Tango::AttReqType 
 {
 	//	Not any excluded states for num_triggers attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::num_triggersStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::num_triggersStateAllowed_WRITE
 
 	//	Not any excluded states for num_triggers attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::num_triggersStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::num_triggersStateAllowed_READ
 	return true;
 }
@@ -405,8 +406,8 @@ bool SlsDetectorControl::is_package_version_allowed(TANGO_UNUSED(Tango::AttReqTy
 
 	//	Not any excluded states for package_version attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::package_versionStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::package_versionStateAllowed_READ
 	return true;
 }
@@ -421,14 +422,14 @@ bool SlsDetectorControl::is_period_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
 	//	Not any excluded states for period attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::periodStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::periodStateAllowed_WRITE
 
 	//	Not any excluded states for period attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::periodStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::periodStateAllowed_READ
 	return true;
 }
@@ -443,14 +444,14 @@ bool SlsDetectorControl::is_rx_zmq_data_stream_allowed(TANGO_UNUSED(Tango::AttRe
 {
 	//	Not any excluded states for rx_zmq_data_stream attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::rx_zmq_data_streamStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::rx_zmq_data_streamStateAllowed_WRITE
 
 	//	Not any excluded states for rx_zmq_data_stream attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::rx_zmq_data_streamStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::rx_zmq_data_streamStateAllowed_READ
 	return true;
 }
@@ -466,8 +467,8 @@ bool SlsDetectorControl::is_temperature_fpga_allowed(TANGO_UNUSED(Tango::AttReqT
 
 	//	Not any excluded states for temperature_fpga attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::temperature_fpgaStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::temperature_fpgaStateAllowed_READ
 	return true;
 }
@@ -483,8 +484,8 @@ bool SlsDetectorControl::is_num_missing_packets_allowed(TANGO_UNUSED(Tango::AttR
 
 	//	Not any excluded states for num_missing_packets attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::num_missing_packetsStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::num_missing_packetsStateAllowed_READ
 	return true;
 }
@@ -499,14 +500,14 @@ bool SlsDetectorControl::is_adc_phase_allowed(TANGO_UNUSED(Tango::AttReqType typ
 {
 	//	Not any excluded states for adc_phase attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::adc_phaseStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::adc_phaseStateAllowed_WRITE
 
 	//	Not any excluded states for adc_phase attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::adc_phaseStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::adc_phaseStateAllowed_READ
 	return true;
 }
@@ -521,14 +522,14 @@ bool SlsDetectorControl::is_delay_after_trigger_allowed(TANGO_UNUSED(Tango::AttR
 {
 	//	Not any excluded states for delay_after_trigger attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::delay_after_triggerStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::delay_after_triggerStateAllowed_WRITE
 
 	//	Not any excluded states for delay_after_trigger attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::delay_after_triggerStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::delay_after_triggerStateAllowed_READ
 	return true;
 }
@@ -543,14 +544,14 @@ bool SlsDetectorControl::is_detector_setting_allowed(TANGO_UNUSED(Tango::AttReqT
 {
 	//	Not any excluded states for detector_setting attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::detector_settingStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::detector_settingStateAllowed_WRITE
 
 	//	Not any excluded states for detector_setting attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::detector_settingStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::detector_settingStateAllowed_READ
 	return true;
 }
@@ -566,8 +567,8 @@ bool SlsDetectorControl::is_num_frames_left_allowed(TANGO_UNUSED(Tango::AttReqTy
 
 	//	Not any excluded states for num_frames_left attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::num_frames_leftStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::num_frames_leftStateAllowed_READ
 	return true;
 }
@@ -583,8 +584,8 @@ bool SlsDetectorControl::is_num_triggers_left_allowed(TANGO_UNUSED(Tango::AttReq
 
 	//	Not any excluded states for num_triggers_left attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::num_triggers_leftStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::num_triggers_leftStateAllowed_READ
 	return true;
 }
@@ -599,14 +600,14 @@ bool SlsDetectorControl::is_power_chip_allowed(TANGO_UNUSED(Tango::AttReqType ty
 {
 	//	Not any excluded states for power_chip attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::power_chipStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::power_chipStateAllowed_WRITE
 
 	//	Not any excluded states for power_chip attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::power_chipStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::power_chipStateAllowed_READ
 	return true;
 }
@@ -621,14 +622,14 @@ bool SlsDetectorControl::is_readout_speed_allowed(TANGO_UNUSED(Tango::AttReqType
 {
 	//	Not any excluded states for readout_speed attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::readout_speedStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::readout_speedStateAllowed_WRITE
 
 	//	Not any excluded states for readout_speed attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::readout_speedStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::readout_speedStateAllowed_READ
 	return true;
 }
@@ -644,8 +645,8 @@ bool SlsDetectorControl::is_temperature_10ge_allowed(TANGO_UNUSED(Tango::AttReqT
 
 	//	Not any excluded states for temperature_10ge attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::temperature_10geStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::temperature_10geStateAllowed_READ
 	return true;
 }
@@ -661,8 +662,8 @@ bool SlsDetectorControl::is_temperature_adc_allowed(TANGO_UNUSED(Tango::AttReqTy
 
 	//	Not any excluded states for temperature_adc attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::temperature_adcStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::temperature_adcStateAllowed_READ
 	return true;
 }
@@ -678,8 +679,8 @@ bool SlsDetectorControl::is_temperature_dcdc_allowed(TANGO_UNUSED(Tango::AttReqT
 
 	//	Not any excluded states for temperature_dcdc attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::temperature_dcdcStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::temperature_dcdcStateAllowed_READ
 	return true;
 }
@@ -695,8 +696,8 @@ bool SlsDetectorControl::is_temperature_fpga2_allowed(TANGO_UNUSED(Tango::AttReq
 
 	//	Not any excluded states for temperature_fpga2 attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::temperature_fpga2StateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::temperature_fpga2StateAllowed_READ
 	return true;
 }
@@ -712,8 +713,8 @@ bool SlsDetectorControl::is_temperature_fpga3_allowed(TANGO_UNUSED(Tango::AttReq
 
 	//	Not any excluded states for temperature_fpga3 attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::temperature_fpga3StateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::temperature_fpga3StateAllowed_READ
 	return true;
 }
@@ -729,8 +730,8 @@ bool SlsDetectorControl::is_temperature_fpgaext_allowed(TANGO_UNUSED(Tango::AttR
 
 	//	Not any excluded states for temperature_fpgaext attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::temperature_fpgaextStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::temperature_fpgaextStateAllowed_READ
 	return true;
 }
@@ -746,8 +747,8 @@ bool SlsDetectorControl::is_temperature_sodl_allowed(TANGO_UNUSED(Tango::AttReqT
 
 	//	Not any excluded states for temperature_sodl attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::temperature_sodlStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::temperature_sodlStateAllowed_READ
 	return true;
 }
@@ -763,8 +764,8 @@ bool SlsDetectorControl::is_temperature_sodr_allowed(TANGO_UNUSED(Tango::AttReqT
 
 	//	Not any excluded states for temperature_sodr attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::temperature_sodrStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::temperature_sodrStateAllowed_READ
 	return true;
 }
@@ -779,14 +780,14 @@ bool SlsDetectorControl::is_tengiga_allowed(TANGO_UNUSED(Tango::AttReqType type)
 {
 	//	Not any excluded states for tengiga attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::tengigaStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::tengigaStateAllowed_WRITE
 
 	//	Not any excluded states for tengiga attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::tengigaStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::tengigaStateAllowed_READ
 	return true;
 }
@@ -801,14 +802,14 @@ bool SlsDetectorControl::is_timing_mode_allowed(TANGO_UNUSED(Tango::AttReqType t
 {
 	//	Not any excluded states for timing_mode attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::timing_modeStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::timing_modeStateAllowed_WRITE
 
 	//	Not any excluded states for timing_mode attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::timing_modeStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::timing_modeStateAllowed_READ
 	return true;
 }
@@ -823,14 +824,14 @@ bool SlsDetectorControl::is_threshold_energy_allowed(TANGO_UNUSED(Tango::AttReqT
 {
 	//	Not any excluded states for threshold_energy attribute in Write access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::threshold_energyStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::threshold_energyStateAllowed_WRITE
 
 	//	Not any excluded states for threshold_energy attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::threshold_energyStateAllowed_READ) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::threshold_energyStateAllowed_READ
 	return true;
 }
@@ -850,8 +851,8 @@ bool SlsDetectorControl::is_start_acquire_allowed(TANGO_UNUSED(const CORBA::Any 
 {
 	//	Not any excluded states for start_acquire command.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::start_acquireStateAllowed) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::start_acquireStateAllowed
 	return true;
 }
@@ -866,8 +867,8 @@ bool SlsDetectorControl::is_stop_acquire_allowed(TANGO_UNUSED(const CORBA::Any &
 {
 	//	Not any excluded states for stop_acquire command.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::stop_acquireStateAllowed) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::stop_acquireStateAllowed
 	return true;
 }
@@ -882,8 +883,8 @@ bool SlsDetectorControl::is_start_receiver_allowed(TANGO_UNUSED(const CORBA::Any
 {
 	//	Not any excluded states for start_receiver command.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::start_receiverStateAllowed) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::start_receiverStateAllowed
 	return true;
 }
@@ -898,8 +899,8 @@ bool SlsDetectorControl::is_stop_receiver_allowed(TANGO_UNUSED(const CORBA::Any 
 {
 	//	Not any excluded states for stop_receiver command.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::stop_receiverStateAllowed) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::stop_receiverStateAllowed
 	return true;
 }
@@ -914,8 +915,8 @@ bool SlsDetectorControl::is_start_detector_allowed(TANGO_UNUSED(const CORBA::Any
 {
 	//	Not any excluded states for start_detector command.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::start_detectorStateAllowed) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::start_detectorStateAllowed
 	return true;
 }
@@ -930,8 +931,8 @@ bool SlsDetectorControl::is_stop_detector_allowed(TANGO_UNUSED(const CORBA::Any 
 {
 	//	Not any excluded states for stop_detector command.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::stop_detectorStateAllowed) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::stop_detectorStateAllowed
 	return true;
 }
@@ -946,8 +947,8 @@ bool SlsDetectorControl::is_load_trimbits_allowed(TANGO_UNUSED(const CORBA::Any 
 {
 	//	Not any excluded states for load_trimbits command.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::load_trimbitsStateAllowed) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
+    /* clang-format on */
+    /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::load_trimbitsStateAllowed
 	return true;
 }

@@ -20,22 +20,21 @@
 //        (Program Obviously used to Generate tango Object)
 //=============================================================================
 
-
 #ifndef SlsDetectorControl_H
 #define SlsDetectorControl_H
 
-#include <tango/tango.h>
 #include <map>
+#include <tango/tango.h>
 using std::map;
 #include <string>
-#include <vector>
 #include <variant>
+#include <vector>
 
 #include <sls/Detector.h>
 #include <sls/Receiver.h>
+#include <sls/ToString.h>
 #include <sls/sls_detector_defs.h>
 #include <sls/sls_detector_exceptions.h>
-#include <sls/ToString.h>
 using dacIndex = sls::defs::dacIndex;
 using detectorType = sls::defs::detectorType;
 
@@ -74,35 +73,48 @@ typedef _timing_modeEnum timing_modeEnum;
 
 /*----- PROTECTED REGION ID(SlsDetectorControl::Additional Class Declarations) ENABLED START -----*/
 /* clang-format on */
-struct attribute_info {
-	bool available;
-	// std::function<void()> checkFunction;
-	std::function<bool()> checkFunction;
-	std::function<void(std::string)> registerFunction;
-	// std::variant<std::function<void(std::string)>,
-	// std::function<void(std::string,std::unique_ptr<SlsTangoEnumAdapter<std::variant<sls::defs::timingMode, sls::defs::detectorSettings>&>>)>> registerFunction; 
+
+struct attribute_info
+{
+    bool available;
+    // std::function<void()> checkFunction;
+    std::function<bool()> checkFunction;
+    std::function<void(std::string)> registerFunction;
+    // std::variant<std::function<void(std::string)>,
+    // std::function<void(std::string,std::unique_ptr<SlsTangoEnumAdapter<std::variant<sls::defs::timingMode,
+    // sls::defs::detectorSettings>&>>)>> registerFunction;
 };
 
 template <typename T>
-class SlsTangoEnumAdapter {
-	// should collect the enums from the detector to slsEnumList
-	public:
-		std::vector<T> slsEnumList;
-		std::vector<std::string> slsEnumLabels;
-		std::unordered_map<short, short> slsEnumToTangoEnumMap;
-		SlsTangoEnumAdapter(std::vector<T> slsEnumList):slsEnumList(slsEnumList){
-			for (short i = 0; i < slsEnumList.size(); ++i) {
-				slsEnumToTangoEnumMap.insert({static_cast<short>(slsEnumList[i]), i});
-				slsEnumLabels.push_back(sls::ToString(slsEnumList[i]));
-			}
-		};
-	T toSlsEnum(Tango::DevEnum tangoEnum) {
-		return slsEnumList[tangoEnum];
-	}
-	Tango::DevEnum toTangoEnum(T slsEnum) {
-		return slsEnumToTangoEnumMap[slsEnum];
-	}
+class SlsTangoEnumAdapter
+{
+    // should collect the enums from the detector to slsEnumList
+  public:
+    std::vector<T> slsEnumList;
+    std::vector<std::string> slsEnumLabels;
+    std::unordered_map<short, short> slsEnumToTangoEnumMap;
+
+    SlsTangoEnumAdapter(std::vector<T> slsEnumList) :
+        slsEnumList(slsEnumList)
+    {
+        for(short i = 0; i < slsEnumList.size(); ++i)
+        {
+            slsEnumToTangoEnumMap.insert({static_cast<short>(slsEnumList[i]), i});
+            slsEnumLabels.push_back(sls::ToString(slsEnumList[i]));
+        }
+    }
+
+    T toSlsEnum(Tango::DevEnum tangoEnum)
+    {
+        return slsEnumList[tangoEnum];
+    }
+
+    Tango::DevEnum toTangoEnum(T slsEnum)
+    {
+        return slsEnumToTangoEnumMap[slsEnum];
+    }
 };
+
 /* clang-format off */
 /*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::Additional Class Declarations
 
@@ -110,106 +122,173 @@ class SlsDetectorControl : public TANGO_BASE_CLASS
 {
 
 /*----- PROTECTED REGION ID(SlsDetectorControl::Data Members) ENABLED START -----*/
-/* clang-format on */
-private:
+    /* clang-format on */
+  private:
     std::unique_ptr<sls::Detector> detector_ptr;
-public:
-	/*
-	 * Some attributes are only available for some detectors.
-	 * The only robust way to determine if the attribute is available
-	 * is to try to read it and catch the exception if it is not available. 
-	*/
-	map<std::string, attribute_info> attributesInfo = {
-		{"adc_phase", {true,
-			[this](){this->detector_ptr->getADCPhase(); return true;},
-			[this](std::string name){this->add_adc_phase_dynamic_attribute(name);
-			}}},
-		{"delay_after_trigger", {true,
-			[this](){this->detector_ptr->getDelayAfterTrigger(); return true;},
-			[this](std::string name){this->add_delay_after_trigger_dynamic_attribute(name);
-			}}},
-		{"num_frames_left", {true,
-			[this](){this->detector_ptr->getNumberOfFramesLeft(); return true;},
-			[this](std::string name){this->add_num_frames_left_dynamic_attribute(name);
-			}}},
-		{"num_triggers_left", {true,
-			[this](){this->detector_ptr->getNumberOfTriggersLeft(); return true;},
-			[this](std::string name){this->add_num_triggers_left_dynamic_attribute(name);
-			}}},
-		{"power_chip", {true,
-			[this](){this->detector_ptr->getPowerChip(); return true;},
-			[this](std::string name){this->add_power_chip_dynamic_attribute(name);
-			}}},
-		{"readout_speed", {true,
-			[this](){auto list = this->detector_ptr->getReadoutSpeedList();
-				this->readoutSpeedAdapter_ptr = std::make_unique<SlsTangoEnumAdapter<sls::defs::speedLevel>>(list);
-				return true;
-			},
-			[this](std::string name){this->add_readout_speed_dynamic_attribute(name, this->readoutSpeedAdapter_ptr);
-			}}},
-		{"temperature_adc", {true,
-			[this](){this->detector_ptr->getTemperature(dacIndex::TEMPERATURE_ADC); return true;},
-			[this](std::string name){this->add_temperature_adc_dynamic_attribute(name);
-			}}},
-		{"temperature_fpgaext", {true,
-			[this](){this->detector_ptr->getTemperature(dacIndex::TEMPERATURE_FPGAEXT); return true;},
-			[this](std::string name){this->add_temperature_fpgaext_dynamic_attribute(name);
-		}}},
-		{"temperature_10ge", {true,
-			[this](){this->detector_ptr->getTemperature(dacIndex::TEMPERATURE_10GE); return true;},
-			[this](std::string name){this->add_temperature_10ge_dynamic_attribute(name);
-			}}},
-		{"temperature_dcdc", {true,
-			[this](){this->detector_ptr->getTemperature(dacIndex::TEMPERATURE_DCDC); return true;},
-			[this](std::string name){this->add_temperature_dcdc_dynamic_attribute(name);
-			}}},
-		{"temperature_sodl", {true,
-			[this](){this->detector_ptr->getTemperature(dacIndex::TEMPERATURE_SODL); return true;},
-			[this](std::string name){this->add_temperature_sodl_dynamic_attribute(name);
-			}}},
-		{"temperature_sodr", {true,
-			[this](){this->detector_ptr->getTemperature(dacIndex::TEMPERATURE_SODR); return true;},
-			[this](std::string name){this->add_temperature_sodr_dynamic_attribute(name);
-			}}},
-		{"temperature_fpga2", {true,
-			[this](){this->detector_ptr->getTemperature(dacIndex::TEMPERATURE_FPGA2); return true;},
-			[this](std::string name){this->add_temperature_fpga2_dynamic_attribute(name);
-			}}},
-		{"temperature_fpga3", {true,
-			[this](){this->detector_ptr->getTemperature(dacIndex::TEMPERATURE_FPGA3); return true;},
-			[this](std::string name){this->add_temperature_fpga3_dynamic_attribute(name);
-			}}},
-		{"tengiga", {true,
-			[this](){this->detector_ptr->getTenGiga(); return true;},
-			[this](std::string name){this->add_tengiga_dynamic_attribute(name);}}},
-		{"timing_mode", {true,
-			[this](){auto list = this->detector_ptr->getTimingModeList();
-				this->timingModeAdapter_ptr = std::make_unique<SlsTangoEnumAdapter<sls::defs::timingMode>>(list);
-				return true;
-			},
-			[this](std::string name){this->add_timing_mode_dynamic_attribute(name, this->timingModeAdapter_ptr);
-			}}},
-		{"detector_setting", {true,
-			[this](){auto list = this->detector_ptr->getSettingsList();
-				this->detectorSettingsAdapter_ptr = std::make_unique<SlsTangoEnumAdapter<sls::defs::detectorSettings>>(list);
-				// [Eiger] Use threshold command. Settings loaded from file found in settingspath
-				return this->detector_ptr->getDetectorType().front() != detectorType::EIGER;
-			},
-			[this](std::string name){this->add_detector_setting_dynamic_attribute(name, this->detectorSettingsAdapter_ptr);
-			}}}
-	};
-	/*
-	 * Also the list of available values for the same attribute is detector dependent.
-	 * Thus, this should be determined at runtime as well.   
-	 * Moreover, the tango enums always start from 0 and increase by one,
-	 * while the sls enums can have different values.
-	 * Thus, we need to keep a mapping between the tango enum values and the sls enum values.
-	*/
-	std::unique_ptr<SlsTangoEnumAdapter<sls::defs::speedLevel>> readoutSpeedAdapter_ptr;
-	std::unique_ptr<SlsTangoEnumAdapter<sls::defs::detectorSettings>> detectorSettingsAdapter_ptr;
-	std::unique_ptr<SlsTangoEnumAdapter<sls::defs::timingMode>> timingModeAdapter_ptr;
 
-/* clang-format off */
+  public:
+    /*
+     * Some attributes are only available for some detectors.
+     * The only robust way to determine if the attribute is available
+     * is to try to read it and catch the exception if it is not available.
+     */
+    map<std::string, attribute_info> attributesInfo = {
+        {"adc_phase",
+         {true,
+          [this]()
+          {
+              this->detector_ptr->getADCPhase();
+              return true;
+          },
+          [this](std::string name) { this->add_adc_phase_dynamic_attribute(name); }}},
+        {"delay_after_trigger",
+         {true,
+          [this]()
+          {
+              this->detector_ptr->getDelayAfterTrigger();
+              return true;
+          },
+          [this](std::string name) { this->add_delay_after_trigger_dynamic_attribute(name); }}},
+        {"num_frames_left",
+         {true,
+          [this]()
+          {
+              this->detector_ptr->getNumberOfFramesLeft();
+              return true;
+          },
+          [this](std::string name) { this->add_num_frames_left_dynamic_attribute(name); }}},
+        {"num_triggers_left",
+         {true,
+          [this]()
+          {
+              this->detector_ptr->getNumberOfTriggersLeft();
+              return true;
+          },
+          [this](std::string name) { this->add_num_triggers_left_dynamic_attribute(name); }}},
+        {"power_chip",
+         {true,
+          [this]()
+          {
+              this->detector_ptr->getPowerChip();
+              return true;
+          },
+          [this](std::string name) { this->add_power_chip_dynamic_attribute(name); }}},
+        {"readout_speed",
+         {true,
+          [this]()
+          {
+              auto list = this->detector_ptr->getReadoutSpeedList();
+              this->readoutSpeedAdapter_ptr = std::make_unique<SlsTangoEnumAdapter<sls::defs::speedLevel>>(list);
+              return true;
+          },
+          [this](std::string name)
+          { this->add_readout_speed_dynamic_attribute(name, this->readoutSpeedAdapter_ptr); }}},
+        {"temperature_adc",
+         {true,
+          [this]()
+          {
+              this->detector_ptr->getTemperature(dacIndex::TEMPERATURE_ADC);
+              return true;
+          },
+          [this](std::string name) { this->add_temperature_adc_dynamic_attribute(name); }}},
+        {"temperature_fpgaext",
+         {true,
+          [this]()
+          {
+              this->detector_ptr->getTemperature(dacIndex::TEMPERATURE_FPGAEXT);
+              return true;
+          },
+          [this](std::string name) { this->add_temperature_fpgaext_dynamic_attribute(name); }}},
+        {"temperature_10ge",
+         {true,
+          [this]()
+          {
+              this->detector_ptr->getTemperature(dacIndex::TEMPERATURE_10GE);
+              return true;
+          },
+          [this](std::string name) { this->add_temperature_10ge_dynamic_attribute(name); }}},
+        {"temperature_dcdc",
+         {true,
+          [this]()
+          {
+              this->detector_ptr->getTemperature(dacIndex::TEMPERATURE_DCDC);
+              return true;
+          },
+          [this](std::string name) { this->add_temperature_dcdc_dynamic_attribute(name); }}},
+        {"temperature_sodl",
+         {true,
+          [this]()
+          {
+              this->detector_ptr->getTemperature(dacIndex::TEMPERATURE_SODL);
+              return true;
+          },
+          [this](std::string name) { this->add_temperature_sodl_dynamic_attribute(name); }}},
+        {"temperature_sodr",
+         {true,
+          [this]()
+          {
+              this->detector_ptr->getTemperature(dacIndex::TEMPERATURE_SODR);
+              return true;
+          },
+          [this](std::string name) { this->add_temperature_sodr_dynamic_attribute(name); }}},
+        {"temperature_fpga2",
+         {true,
+          [this]()
+          {
+              this->detector_ptr->getTemperature(dacIndex::TEMPERATURE_FPGA2);
+              return true;
+          },
+          [this](std::string name) { this->add_temperature_fpga2_dynamic_attribute(name); }}},
+        {"temperature_fpga3",
+         {true,
+          [this]()
+          {
+              this->detector_ptr->getTemperature(dacIndex::TEMPERATURE_FPGA3);
+              return true;
+          },
+          [this](std::string name) { this->add_temperature_fpga3_dynamic_attribute(name); }}},
+        {"tengiga",
+         {true,
+          [this]()
+          {
+              this->detector_ptr->getTenGiga();
+              return true;
+          },
+          [this](std::string name) { this->add_tengiga_dynamic_attribute(name); }}},
+        {"timing_mode",
+         {true,
+          [this]()
+          {
+              auto list = this->detector_ptr->getTimingModeList();
+              this->timingModeAdapter_ptr = std::make_unique<SlsTangoEnumAdapter<sls::defs::timingMode>>(list);
+              return true;
+          },
+          [this](std::string name) { this->add_timing_mode_dynamic_attribute(name, this->timingModeAdapter_ptr); }}},
+        {"detector_setting",
+         {true,
+          [this]()
+          {
+              auto list = this->detector_ptr->getSettingsList();
+              this->detectorSettingsAdapter_ptr =
+                  std::make_unique<SlsTangoEnumAdapter<sls::defs::detectorSettings>>(list);
+              // [Eiger] Use threshold command. Settings loaded from file found
+              // in settingspath
+              return this->detector_ptr->getDetectorType().front() != detectorType::EIGER;
+          },
+          [this](std::string name)
+          { this->add_detector_setting_dynamic_attribute(name, this->detectorSettingsAdapter_ptr); }}}};
+    /*
+     * Also the list of available values for the same attribute is detector
+     * dependent. Thus, this should be determined at runtime as well. Moreover,
+     * the tango enums always start from 0 and increase by one, while the sls
+     * enums can have different values. Thus, we need to keep a mapping between
+     * the tango enum values and the sls enum values.
+     */
+    std::unique_ptr<SlsTangoEnumAdapter<sls::defs::speedLevel>> readoutSpeedAdapter_ptr;
+    std::unique_ptr<SlsTangoEnumAdapter<sls::defs::detectorSettings>> detectorSettingsAdapter_ptr;
+    std::unique_ptr<SlsTangoEnumAdapter<sls::defs::timingMode>> timingModeAdapter_ptr;
+
+    /* clang-format off */
 /*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::Data Members
 
 //	Device property data members
@@ -876,13 +955,16 @@ public:
 	void add_dynamic_commands();
 
 /*----- PROTECTED REGION ID(SlsDetectorControl::Additional Method prototypes) ENABLED START -----*/
-/* clang-format on */
-//	Additional Method prototypes
-void add_readout_speed_dynamic_attribute(std::string attname, std::unique_ptr<SlsTangoEnumAdapter<sls::defs::speedLevel>>& slsEnumAdapter_ptr);
-void add_detector_setting_dynamic_attribute(std::string attname, std::unique_ptr<SlsTangoEnumAdapter<sls::defs::detectorSettings>>& slsEnumAdapter_ptr);
-void add_timing_mode_dynamic_attribute(std::string attname, std::unique_ptr<SlsTangoEnumAdapter<sls::defs::timingMode>>& slsEnumAdapter_ptr);
+    /* clang-format on */
+    //	Additional Method prototypes
+    void add_readout_speed_dynamic_attribute(
+        std::string attname, std::unique_ptr<SlsTangoEnumAdapter<sls::defs::speedLevel>> &slsEnumAdapter_ptr);
+    void add_detector_setting_dynamic_attribute(
+        std::string attname, std::unique_ptr<SlsTangoEnumAdapter<sls::defs::detectorSettings>> &slsEnumAdapter_ptr);
+    void add_timing_mode_dynamic_attribute(
+        std::string attname, std::unique_ptr<SlsTangoEnumAdapter<sls::defs::timingMode>> &slsEnumAdapter_ptr);
 
-/* clang-format off */
+    /* clang-format off */
 /*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::Additional Method prototypes
 };
 
