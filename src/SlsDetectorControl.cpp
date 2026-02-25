@@ -41,14 +41,14 @@
 //
 //  Command name    |  Method name
 //================================================================
-//  State           |  Inherited (no method)
-//  Status          |  Inherited (no method)
 //  start_acquire   |  start_acquire
-//  stop_acquire    |  stop_acquire
-//  start_receiver  |  start_receiver
-//  stop_receiver   |  stop_receiver
 //  start_detector  |  start_detector
+//  start_receiver  |  start_receiver
+//  stop_acquire    |  stop_acquire
 //  stop_detector   |  stop_detector
+//  stop_receiver   |  stop_receiver
+//  Status          |  Inherited (no method)
+//  State           |  Inherited (no method)
 //================================================================
 
 //================================================================
@@ -64,7 +64,6 @@
 //  file_path            |  Tango::DevString	Scalar
 //  file_write           |  Tango::DevBoolean	Scalar
 //  firmware_version     |  Tango::DevLong64	Scalar
-//  full_file_name       |  Tango::DevString	Scalar
 //  high_voltage         |  Tango::DevLong	Scalar
 //  hostname             |  Tango::DevString	Scalar
 //  master_file_write    |  Tango::DevBoolean	Scalar
@@ -143,6 +142,24 @@ void SlsDetectorControl::delete_device()
     //	Delete device allocated objects
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::delete_device
+	delete[] attr_acquisition_index_read;
+	delete[] attr_dynamic_range_read;
+	delete[] attr_exptime_read;
+	delete[] attr_file_name_read;
+	delete[] attr_file_name_prefix_read;
+	delete[] attr_file_overwrite_read;
+	delete[] attr_file_path_read;
+	delete[] attr_file_write_read;
+	delete[] attr_firmware_version_read;
+	delete[] attr_high_voltage_read;
+	delete[] attr_hostname_read;
+	delete[] attr_master_file_write_read;
+	delete[] attr_num_frames_read;
+	delete[] attr_num_frames_per_file_read;
+	delete[] attr_num_triggers_read;
+	delete[] attr_package_version_read;
+	delete[] attr_period_read;
+	delete[] attr_rx_zmq_data_stream_read;
 	delete[] attr_temperature_fpga_read;
 }
 
@@ -165,6 +182,24 @@ void SlsDetectorControl::init_device()
 	//	Get the device properties from database
 	get_device_property();
 
+	attr_acquisition_index_read = new Tango::DevLong64[1];
+	attr_dynamic_range_read = new Tango::DevLong[1];
+	attr_exptime_read = new Tango::DevDouble[1];
+	attr_file_name_read = new Tango::DevString[1];
+	attr_file_name_prefix_read = new Tango::DevString[1];
+	attr_file_overwrite_read = new Tango::DevBoolean[1];
+	attr_file_path_read = new Tango::DevString[1];
+	attr_file_write_read = new Tango::DevBoolean[1];
+	attr_firmware_version_read = new Tango::DevLong64[1];
+	attr_high_voltage_read = new Tango::DevLong[1];
+	attr_hostname_read = new Tango::DevString[1];
+	attr_master_file_write_read = new Tango::DevBoolean[1];
+	attr_num_frames_read = new Tango::DevLong64[1];
+	attr_num_frames_per_file_read = new Tango::DevLong[1];
+	attr_num_triggers_read = new Tango::DevLong64[1];
+	attr_package_version_read = new Tango::DevString[1];
+	attr_period_read = new Tango::DevDouble[1];
+	attr_rx_zmq_data_stream_read = new Tango::DevBoolean[1];
 	attr_temperature_fpga_read = new Tango::DevLong[1];
 	//	No longer if mandatory property not set.
 	if (mandatoryNotDefined)
@@ -183,14 +218,6 @@ void SlsDetectorControl::init_device()
         TANGO_LOG_DEBUG << "Error loading detector configuration: " << e.what() << std::endl;
     }
 
-    // for (auto& [k, v] : attributesInfo) {
-    // 	try {
-    // 		std::get<1>(v)();
-    // 	} catch (sls::RuntimeError &e) {
-    // 		TANGO_LOG_DEBUG << "Error initializing attribute " << k << ": "
-    // << e.what() << std::endl; 		std::get<0>(v) = false;
-    // 	}
-    // }
     for(auto &[k, v] : attributesInfo)
     {
         try
@@ -204,10 +231,6 @@ void SlsDetectorControl::init_device()
         }
     }
 
-    // detectorSettingsAdapter_ptr =
-    // std::make_unique<SlsTangoEnumAdapter<sls::defs::detectorSettings>>(detector_ptr->getSettingsList());
-    // timingModeAdapter_ptr =
-    // std::make_unique<SlsTangoEnumAdapter<sls::defs::timingMode>>(detector_ptr->getTimingModeList());
     set_state(Tango::ON);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::init_device
@@ -231,8 +254,8 @@ void SlsDetectorControl::get_device_property()
 
 	//	Read device properties from database.
 	Tango::DbData	dev_prop;
-	dev_prop.push_back(Tango::DbDatum("DetectorId"));
 	dev_prop.push_back(Tango::DbDatum("ConfigurationPathDevString"));
+	dev_prop.push_back(Tango::DbDatum("DetectorId"));
 	dev_prop.push_back(Tango::DbDatum("GainMapPaths"));
 	dev_prop.push_back(Tango::DbDatum("PixelMaskPaths"));
 
@@ -249,17 +272,6 @@ void SlsDetectorControl::get_device_property()
 			(static_cast<SlsDetectorControlClass *>(get_device_class()));
 		int	i = -1;
 
-		//	Try to initialize DetectorId from class property
-		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
-		if (cl_prop.is_empty()==false)	cl_prop  >>  detectorId;
-		else {
-			//	Try to initialize DetectorId from default device value
-			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
-			if (def_prop.is_empty()==false)	def_prop  >>  detectorId;
-		}
-		//	And try to extract DetectorId value from database
-		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  detectorId;
-
 		//	Try to initialize ConfigurationPathDevString from class property
 		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
 		if (cl_prop.is_empty()==false)	cl_prop  >>  configurationPathDevString;
@@ -272,6 +284,17 @@ void SlsDetectorControl::get_device_property()
 		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  configurationPathDevString;
 		//	Property StartDsPath is mandatory, check if has been defined in database.
 		check_mandatory_property(cl_prop, dev_prop[i]);
+
+		//	Try to initialize DetectorId from class property
+		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
+		if (cl_prop.is_empty()==false)	cl_prop  >>  detectorId;
+		else {
+			//	Try to initialize DetectorId from default device value
+			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
+			if (def_prop.is_empty()==false)	def_prop  >>  detectorId;
+		}
+		//	And try to extract DetectorId value from database
+		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  detectorId;
 
 		//	Try to initialize GainMapPaths from class property
 		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
@@ -399,7 +422,7 @@ void SlsDetectorControl::read_acquisition_index(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_acquisition_index(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_acquisition_index) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *attr_acquisition_index_read = detector_ptr->getAcquisitionIndex().front();
     attr.set_value(attr_acquisition_index_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_acquisition_index
@@ -421,7 +444,7 @@ void SlsDetectorControl::write_acquisition_index(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_acquisition_index) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    detector_ptr->setAcquisitionIndex(w_val);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_acquisition_index
 }
@@ -460,7 +483,7 @@ void SlsDetectorControl::read_dynamic_range(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_dynamic_range(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_dynamic_range) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *attr_dynamic_range_read = detector_ptr->getDynamicRange().front();
     attr.set_value(attr_dynamic_range_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_dynamic_range
@@ -482,7 +505,7 @@ void SlsDetectorControl::write_dynamic_range(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_dynamic_range) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    detector_ptr->setDynamicRange(w_val);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_dynamic_range
 }
@@ -501,6 +524,8 @@ void SlsDetectorControl::read_exptime(Tango::Attribute &attr)
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_exptime) ENABLED START -----*/
     /* clang-format on */
     //	Set the attribute value
+    auto exptime = detector_ptr->getExptime().front();
+    *attr_exptime_read = std::chrono::duration<double>(exptime).count();
     attr.set_value(attr_exptime_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_exptime
@@ -522,7 +547,8 @@ void SlsDetectorControl::write_exptime(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_exptime) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    auto exptime = std::chrono::round<std::chrono::nanoseconds>(w_val * 1s);
+    detector_ptr->setExptime(exptime);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_exptime
 }
@@ -540,31 +566,18 @@ void SlsDetectorControl::read_file_name(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_file_name(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_file_name) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    // default run File Name: [file name prefix]_d[module index]_f[file index]_[acquisition index].[file format] eg.
+    // run_d0_f0_5.raw
+    std::string file_name_prefix = detector_ptr->getFileNamePrefix().front();
+    int module_index = 0;
+    auto file_index = detector_ptr->getAcquisitionIndex().front();
+    auto file_format = detector_ptr->getFileFormat().front();
+    std::string full_string = file_name_prefix + "_d" + std::to_string(module_index) + "_f" +
+                              std::to_string(file_index) + "_" + std::to_string(file_format);
+    *attr_file_name_read = Tango::string_dup(full_string);
     attr.set_value(attr_file_name_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_file_name
-}
-//--------------------------------------------------------
-/**
- *	Write attribute file_name related method
- *
- *
- *	Data type:	Tango::DevString
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void SlsDetectorControl::write_file_name(Tango::WAttribute &attr)
-{
-	DEBUG_STREAM << "SlsDetectorControl::write_file_name(Tango::WAttribute &attr) entering... " << std::endl;
-	//	Retrieve write value
-	Tango::DevString	w_val;
-	attr.get_write_value(w_val);
-	/*----- PROTECTED REGION ID(SlsDetectorControl::write_file_name) ENABLED START -----*/
-    /* clang-format on */
-    //	Add your own code
-    /* clang-format off */
-	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_file_name
 }
 //--------------------------------------------------------
 /**
@@ -580,7 +593,7 @@ void SlsDetectorControl::read_file_name_prefix(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_file_name_prefix(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_file_name_prefix) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *attr_file_name_prefix_read = Tango::string_dup(detector_ptr->getFileNamePrefix().front());
     attr.set_value(attr_file_name_prefix_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_file_name_prefix
@@ -602,7 +615,7 @@ void SlsDetectorControl::write_file_name_prefix(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_file_name_prefix) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    detector_ptr->setFileNamePrefix(w_val);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_file_name_prefix
 }
@@ -620,7 +633,7 @@ void SlsDetectorControl::read_file_overwrite(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_file_overwrite(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_file_overwrite) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *attr_file_overwrite_read = detector_ptr->getFileOverWrite().front();
     attr.set_value(attr_file_overwrite_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_file_overwrite
@@ -642,7 +655,7 @@ void SlsDetectorControl::write_file_overwrite(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_file_overwrite) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    detector_ptr->setFileOverWrite(w_val);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_file_overwrite
 }
@@ -660,7 +673,7 @@ void SlsDetectorControl::read_file_path(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_file_path(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_file_path) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *attr_file_path_read = Tango::string_dup(detector_ptr->getFilePath().front());
     attr.set_value(attr_file_path_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_file_path
@@ -682,7 +695,7 @@ void SlsDetectorControl::write_file_path(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_file_path) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    detector_ptr->setFilePath(w_val);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_file_path
 }
@@ -700,7 +713,7 @@ void SlsDetectorControl::read_file_write(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_file_write(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_file_write) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *attr_file_write_read = detector_ptr->getFileWrite().front();
     attr.set_value(attr_file_write_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_file_write
@@ -722,7 +735,7 @@ void SlsDetectorControl::write_file_write(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_file_write) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    detector_ptr->setFileWrite(w_val);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_file_write
 }
@@ -740,29 +753,10 @@ void SlsDetectorControl::read_firmware_version(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_firmware_version(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_firmware_version) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *attr_firmware_version_read = detector_ptr->getFirmwareVersion().front();
     attr.set_value(attr_firmware_version_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_firmware_version
-}
-//--------------------------------------------------------
-/**
- *	Read attribute full_file_name related method
- *
- *
- *	Data type:	Tango::DevString
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void SlsDetectorControl::read_full_file_name(Tango::Attribute &attr)
-{
-	DEBUG_STREAM << "SlsDetectorControl::read_full_file_name(Tango::Attribute &attr) entering... " << std::endl;
-	/*----- PROTECTED REGION ID(SlsDetectorControl::read_full_file_name) ENABLED START -----*/
-    /* clang-format on */
-    //	Set the attribute value
-    attr.set_value(attr_full_file_name_read);
-    /* clang-format off */
-	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_full_file_name
 }
 //--------------------------------------------------------
 /**
@@ -778,7 +772,7 @@ void SlsDetectorControl::read_high_voltage(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_high_voltage(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_high_voltage) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *attr_high_voltage_read = detector_ptr->getHighVoltage().front();
     attr.set_value(attr_high_voltage_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_high_voltage
@@ -800,7 +794,7 @@ void SlsDetectorControl::write_high_voltage(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_high_voltage) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    detector_ptr->setHighVoltage(w_val);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_high_voltage
 }
@@ -818,7 +812,7 @@ void SlsDetectorControl::read_hostname(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_hostname(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_hostname) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *attr_hostname_read = Tango::string_dup(detector_ptr->getHostname().front());
     attr.set_value(attr_hostname_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_hostname
@@ -837,7 +831,7 @@ void SlsDetectorControl::read_master_file_write(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_master_file_write(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_master_file_write) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *attr_master_file_write_read = detector_ptr->getMasterFileWrite();
     attr.set_value(attr_master_file_write_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_master_file_write
@@ -859,7 +853,7 @@ void SlsDetectorControl::write_master_file_write(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_master_file_write) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    detector_ptr->setMasterFileWrite(w_val);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_master_file_write
 }
@@ -877,7 +871,7 @@ void SlsDetectorControl::read_num_frames(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_num_frames(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_num_frames) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *attr_num_frames_read = detector_ptr->getNumberOfFrames().front();
     attr.set_value(attr_num_frames_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_num_frames
@@ -899,7 +893,7 @@ void SlsDetectorControl::write_num_frames(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_num_frames) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    detector_ptr->setNumberOfFrames(w_val);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_num_frames
 }
@@ -918,6 +912,7 @@ void SlsDetectorControl::read_num_frames_per_file(Tango::Attribute &attr)
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_num_frames_per_file) ENABLED START -----*/
     /* clang-format on */
     //	Set the attribute value
+    *attr_num_frames_per_file_read = detector_ptr->getFramesPerFile().front();
     attr.set_value(attr_num_frames_per_file_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_num_frames_per_file
@@ -939,10 +934,10 @@ void SlsDetectorControl::write_num_frames_per_file(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_num_frames_per_file) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
-    /* clang-format off */
-	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_num_frames_per_file
+    detector_ptr->setFramesPerFile(w_val);
+    /*----- PROTECTED REGION END -----*/ //	SlsDetectorControl::write_num_frames_per_file
 }
+
 //--------------------------------------------------------
 /**
  *	Read attribute num_triggers related method
@@ -954,10 +949,10 @@ void SlsDetectorControl::write_num_frames_per_file(Tango::WAttribute &attr)
 //--------------------------------------------------------
 void SlsDetectorControl::read_num_triggers(Tango::Attribute &attr)
 {
-	DEBUG_STREAM << "SlsDetectorControl::read_num_triggers(Tango::Attribute &attr) entering... " << std::endl;
-	/*----- PROTECTED REGION ID(SlsDetectorControl::read_num_triggers) ENABLED START -----*/
+    DEBUG_STREAM << "SlsDetectorControl::read_num_triggers(Tango::Attribute &attr) entering... " << std::endl;
+    /*----- PROTECTED REGION ID(SlsDetectorControl::read_num_triggers) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *attr_num_triggers_read = detector_ptr->getNumberOfTriggers().front();
     attr.set_value(attr_num_triggers_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_num_triggers
@@ -979,7 +974,7 @@ void SlsDetectorControl::write_num_triggers(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_num_triggers) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    detector_ptr->setNumberOfTriggers(w_val);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_num_triggers
 }
@@ -997,7 +992,7 @@ void SlsDetectorControl::read_package_version(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_package_version(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_package_version) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *attr_package_version_read = Tango::string_dup(sls::ToString(detector_ptr->getPackageVersion()));
     attr.set_value(attr_package_version_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_package_version
@@ -1016,7 +1011,7 @@ void SlsDetectorControl::read_period(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_period(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_period) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *attr_period_read = std::chrono::duration<double>(detector_ptr->getPeriod().front()).count();
     attr.set_value(attr_period_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_period
@@ -1038,7 +1033,8 @@ void SlsDetectorControl::write_period(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_period) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    auto period = std::chrono::round<std::chrono::nanoseconds>(w_val * 1s);
+    detector_ptr->setPeriod(period);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_period
 }
@@ -1056,7 +1052,7 @@ void SlsDetectorControl::read_rx_zmq_data_stream(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_rx_zmq_data_stream(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_rx_zmq_data_stream) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *attr_rx_zmq_data_stream_read = detector_ptr->getRxZmqDataStream().front();
     attr.set_value(attr_rx_zmq_data_stream_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_rx_zmq_data_stream
@@ -1078,7 +1074,7 @@ void SlsDetectorControl::write_rx_zmq_data_stream(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_rx_zmq_data_stream) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    detector_ptr->setRxZmqDataStream(w_val);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_rx_zmq_data_stream
 }
@@ -1136,7 +1132,7 @@ void SlsDetectorControl::read_adc_phase(Tango::Attribute &attr)
 	Tango::DevLong	*att_value = get_adc_phase_data_ptr(attr.get_name());
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_adc_phase) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *att_value = detector_ptr->getADCPhaseInDegrees().front();
     attr.set_value(att_value);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_adc_phase
@@ -1158,7 +1154,7 @@ void SlsDetectorControl::write_adc_phase(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_adc_phase) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    detector_ptr->setADCPhaseInDegrees(w_val);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_adc_phase
 }
@@ -1247,6 +1243,57 @@ void SlsDetectorControl::write_detector_setting(Tango::WAttribute &attr)
 }
 //--------------------------------------------------------
 /**
+ *	Read attribute file_format related method
+ *
+ *
+ *	Data type:	Tango::DevEnum (file_formatEnum)
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void SlsDetectorControl::read_file_format(Tango::Attribute &attr)
+{
+	DEBUG_STREAM << "SlsDetectorControl::read_file_format(Tango::Attribute &attr) entering... " << std::endl;
+	Tango::DevEnum	*att_value = get_file_format_data_ptr(attr.get_name());
+	/*----- PROTECTED REGION ID(SlsDetectorControl::read_file_format) ENABLED START -----*/
+    /* clang-format on */
+    auto file_format = detector_ptr->getFileFormat().front();
+    *att_value = fileFormatAdapter_ptr->toTangoEnum(file_format);
+    attr.set_value(att_value);
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_file_format
+}
+//--------------------------------------------------------
+/**
+ *	Write attribute file_format related method
+ *
+ *
+ *	Data type:	Tango::DevEnum (file_formatEnum)
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void SlsDetectorControl::write_file_format(Tango::WAttribute &attr)
+{
+	DEBUG_STREAM << "SlsDetectorControl::write_file_format(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	file_formatEnum	w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(SlsDetectorControl::write_file_format) ENABLED START -----*/
+    /* clang-format on */
+    auto file_format = fileFormatAdapter_ptr->toSlsEnum(static_cast<Tango::DevEnum>(w_val));
+    try
+    {
+        detector_ptr->setFileFormat(file_format);
+    }
+    catch(sls::RuntimeError &e)
+    {
+        // Tango DevFailed exception must be thrown in case of error
+        Tango::Except::throw_exception("TangoException", e.what(), "SlsDetectorControl::write_file_format");
+    }
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_file_format
+}
+//--------------------------------------------------------
+/**
  *	Read attribute num_frames_left related method
  *
  *
@@ -1300,7 +1347,7 @@ void SlsDetectorControl::read_power_chip(Tango::Attribute &attr)
 	Tango::DevBoolean	*att_value = get_power_chip_data_ptr(attr.get_name());
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_power_chip) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *att_value = detector_ptr->getPowerChip().front();
     attr.set_value(att_value);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_power_chip
@@ -1322,7 +1369,7 @@ void SlsDetectorControl::write_power_chip(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_power_chip) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    detector_ptr->setPowerChip(w_val);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_power_chip
 }
@@ -1341,7 +1388,8 @@ void SlsDetectorControl::read_readout_speed(Tango::Attribute &attr)
 	Tango::DevEnum	*att_value = get_readout_speed_data_ptr(attr.get_name());
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_readout_speed) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    auto readout_speed = detector_ptr->getReadoutSpeed().front();
+    *att_value = readoutSpeedAdapter_ptr->toTangoEnum(readout_speed);
     attr.set_value(att_value);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_readout_speed
@@ -1364,6 +1412,8 @@ void SlsDetectorControl::write_readout_speed(Tango::WAttribute &attr)
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_readout_speed) ENABLED START -----*/
     /* clang-format on */
     //	Add your own code
+    auto sls_readout_speed = readoutSpeedAdapter_ptr->toSlsEnum(static_cast<Tango::DevEnum>(w_val));
+    detector_ptr->setReadoutSpeed(sls_readout_speed);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_readout_speed
 }
@@ -1669,6 +1719,7 @@ void SlsDetectorControl::add_dynamic_attributes()
 	//	add_adc_phase_dynamic_attribute("Myadc_phaseAttribute");
 	//	add_delay_after_trigger_dynamic_attribute("Mydelay_after_triggerAttribute");
 	//	add_detector_setting_dynamic_attribute("Mydetector_settingAttribute");
+	//	add_file_format_dynamic_attribute("Myfile_formatAttribute");
 	//	add_num_frames_left_dynamic_attribute("Mynum_frames_leftAttribute");
 	//	add_num_triggers_left_dynamic_attribute("Mynum_triggers_leftAttribute");
 	//	add_power_chip_dynamic_attribute("Mypower_chipAttribute");
@@ -1687,7 +1738,6 @@ void SlsDetectorControl::add_dynamic_attributes()
 
 	/*----- PROTECTED REGION ID(SlsDetectorControl::add_dynamic_attributes) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code to create and add dynamic attributes if any
     for(auto &[k, v] : attributesInfo)
     {
         if(v.available)
@@ -1711,29 +1761,33 @@ void SlsDetectorControl::start_acquire()
 	DEBUG_STREAM << "SlsDetectorControl::start_acquire()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::start_acquire) ENABLED START -----*/
     /* clang-format on */
-
-    //	Add your own code
-
+    detector_ptr->startReceiver();
+    detector_ptr->startDetector();
+    // A detector takes a while after startDetector() execution to change its
+    // state. So if there is no delay after startDetector() and self.get_state()
+    // check it's very probable that detector will be still in ON mode (even not
+    // started to acquire.)
+    std::this_thread::sleep_for(0.1s);
+    set_state(Tango::MOVING);
+    std::thread(&SlsDetectorControl::check_stop_in_background_acquisition, this).detach();
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::start_acquire
 }
 //--------------------------------------------------------
 /**
- *	Command stop_acquire related method
+ *	Command start_detector related method
  *
  *
  */
 //--------------------------------------------------------
-void SlsDetectorControl::stop_acquire()
+void SlsDetectorControl::start_detector()
 {
-	DEBUG_STREAM << "SlsDetectorControl::stop_acquire()  - " << device_name << std::endl;
-	/*----- PROTECTED REGION ID(SlsDetectorControl::stop_acquire) ENABLED START -----*/
+	DEBUG_STREAM << "SlsDetectorControl::start_detector()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(SlsDetectorControl::start_detector) ENABLED START -----*/
     /* clang-format on */
-
-    //	Add your own code
-
+    detector_ptr->startDetector();
     /* clang-format off */
-	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::stop_acquire
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::start_detector
 }
 //--------------------------------------------------------
 /**
@@ -1755,39 +1809,22 @@ void SlsDetectorControl::start_receiver()
 }
 //--------------------------------------------------------
 /**
- *	Command stop_receiver related method
+ *	Command stop_acquire related method
  *
  *
  */
 //--------------------------------------------------------
-void SlsDetectorControl::stop_receiver()
+void SlsDetectorControl::stop_acquire()
 {
-	DEBUG_STREAM << "SlsDetectorControl::stop_receiver()  - " << device_name << std::endl;
-	/*----- PROTECTED REGION ID(SlsDetectorControl::stop_receiver) ENABLED START -----*/
+	DEBUG_STREAM << "SlsDetectorControl::stop_acquire()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(SlsDetectorControl::stop_acquire) ENABLED START -----*/
     /* clang-format on */
-
-    //	Add your own code
-
+    detector_ptr->stopDetector();
+    detector_ptr->stopReceiver();
+    detector_ptr->clearAcquiringFlag();
+    set_state(Tango::ON);
     /* clang-format off */
-	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::stop_receiver
-}
-//--------------------------------------------------------
-/**
- *	Command start_detector related method
- *
- *
- */
-//--------------------------------------------------------
-void SlsDetectorControl::start_detector()
-{
-	DEBUG_STREAM << "SlsDetectorControl::start_detector()  - " << device_name << std::endl;
-	/*----- PROTECTED REGION ID(SlsDetectorControl::start_detector) ENABLED START -----*/
-    /* clang-format on */
-
-    //	Add your own code
-
-    /* clang-format off */
-	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::start_detector
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::stop_acquire
 }
 //--------------------------------------------------------
 /**
@@ -1801,11 +1838,25 @@ void SlsDetectorControl::stop_detector()
 	DEBUG_STREAM << "SlsDetectorControl::stop_detector()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::stop_detector) ENABLED START -----*/
     /* clang-format on */
-
-    //	Add your own code
-
+    detector_ptr->stopDetector();
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::stop_detector
+}
+//--------------------------------------------------------
+/**
+ *	Command stop_receiver related method
+ *
+ *
+ */
+//--------------------------------------------------------
+void SlsDetectorControl::stop_receiver()
+{
+	DEBUG_STREAM << "SlsDetectorControl::stop_receiver()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(SlsDetectorControl::stop_receiver) ENABLED START -----*/
+    /* clang-format on */
+    detector_ptr->stopReceiver();
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::stop_receiver
 }
 //--------------------------------------------------------
 /**
@@ -1849,8 +1900,19 @@ void SlsDetectorControl::add_dynamic_commands()
 /*----- PROTECTED REGION ID(SlsDetectorControl::namespace_ending) ENABLED START -----*/
 /* clang-format on */
 
+void SlsDetectorControl::check_stop_in_background_acquisition()
+{
+    runStatus det_status = detector_ptr->getDetectorStatus().front();
+    while(det_status != runStatus::IDLE && det_status != runStatus::RUN_FINISHED && det_status != runStatus::STOPPED)
+    {
+        std::this_thread::sleep_for(0.1s);
+        det_status = detector_ptr->getDetectorStatus().front();
+    }
+    stop_acquire();
+}
+
 void SlsDetectorControl::add_readout_speed_dynamic_attribute(
-    std::string attname, std::unique_ptr<SlsTangoEnumAdapter<sls::defs::speedLevel>> &slsEnumAdapter_ptr)
+    std::string attname, std::unique_ptr<SlsTangoEnumAdapter<speedLevel>> &slsEnumAdapter_ptr)
 {
     //	Attribute : readout_speed
     readout_speedAttrib *readout_speed = new readout_speedAttrib(attname);
@@ -1879,7 +1941,7 @@ void SlsDetectorControl::add_readout_speed_dynamic_attribute(
 }
 
 void SlsDetectorControl::add_detector_setting_dynamic_attribute(
-    std::string attname, std::unique_ptr<SlsTangoEnumAdapter<sls::defs::detectorSettings>> &slsEnumAdapter_ptr)
+    std::string attname, std::unique_ptr<SlsTangoEnumAdapter<detectorSettings>> &slsEnumAdapter_ptr)
 {
     //	Attribute : detector_setting
     detector_settingAttrib *detector_setting = new detector_settingAttrib(attname);
@@ -1908,7 +1970,7 @@ void SlsDetectorControl::add_detector_setting_dynamic_attribute(
 }
 
 void SlsDetectorControl::add_timing_mode_dynamic_attribute(
-    std::string attname, std::unique_ptr<SlsTangoEnumAdapter<sls::defs::timingMode>> &slsEnumAdapter_ptr)
+    std::string attname, std::unique_ptr<SlsTangoEnumAdapter<timingMode>> &slsEnumAdapter_ptr)
 {
     //	Attribute : timing_mode
     timing_modeAttrib *timing_mode = new timing_modeAttrib(attname);
@@ -1934,6 +1996,35 @@ void SlsDetectorControl::add_timing_mode_dynamic_attribute(
     //	Not Memorized
     timing_mode_data.insert(make_pair(attname, 0));
     add_attribute(timing_mode);
+}
+
+void SlsDetectorControl::add_file_format_dynamic_attribute(
+    std::string attname, std::unique_ptr<SlsTangoEnumAdapter<fileFormat>> &slsEnumAdapter_ptr)
+{
+    //	Attribute : file_format
+    file_formatAttrib *file_format = new file_formatAttrib(attname);
+    Tango::UserDefaultAttrProp file_format_prop;
+    //	description	not set for file_format
+    //	label	not set for file_format
+    //	unit	not set for file_format
+    //	standard_unit	not set for file_format
+    //	display_unit	not set for file_format
+    //	format	not set for file_format
+    //	max_value	not set for file_format
+    //	min_value	not set for file_format
+    //	max_alarm	not set for file_format
+    //	min_alarm	not set for file_format
+    //	max_warning	not set for file_format
+    //	min_warning	not set for file_format
+    //	delta_t	not set for file_format
+    //	delta_val	not set for file_format
+    file_format_prop.set_enum_labels(slsEnumAdapter_ptr->slsEnumLabels);
+    file_format->set_default_properties(file_format_prop);
+    //	Not Polled
+    file_format->set_disp_level(Tango::OPERATOR);
+    //	Not Memorized
+    file_format_data.insert(make_pair(attname, 0));
+    add_attribute(file_format);
 }
 
 /* clang-format off */// //--------------------------------------------------------
@@ -1972,6 +2063,69 @@ void SlsDetectorControl::add_timing_mode_dynamic_attribute(
 // 	/* clang-format on */
 // 	//	Add your own code
 // 	/* clang-format off */
+// }
+
+// //--------------------------------------------------------
+// /**
+//  *	Read attribute file_format related method
+//  *
+//  *
+//  *	Data type:	Tango::DevEnum (file_formatEnum)
+//  *	Attr type:	Scalar
+//  */
+// //--------------------------------------------------------
+// void SlsDetectorControl::read_file_format(Tango::Attribute &attr)
+// {
+// 	DEBUG_STREAM << "SlsDetectorControl::read_file_format(Tango::Attribute &attr) entering... " << std::endl;
+// 	/* clang-format on */
+// 	//	Set the attribute value
+// 	attr.set_value(attr_file_format_read);
+// 	/* clang-format off */
+// }
+
+// //--------------------------------------------------------
+// /**
+//  *	Write attribute file_format related method
+//  *
+//  *
+//  *	Data type:	Tango::DevEnum (file_formatEnum)
+//  *	Attr type:	Scalar
+//  */
+// //--------------------------------------------------------
+// void SlsDetectorControl::write_file_format(Tango::WAttribute &attr)
+// {
+// 	DEBUG_STREAM << "SlsDetectorControl::write_file_format(Tango::WAttribute &attr) entering... " << std::endl;
+// 	//	Retrieve write value
+// 	file_formatEnum	w_val;
+// 	attr.get_write_value(w_val);
+// 	/* clang-format on */
+// 	//	Add your own code
+// 	/* clang-format off */
+// }
+
+// //--------------------------------------------------------
+// /**
+//  *	Read attribute full_file_name related method
+//  *
+//  *
+//  *	Data type:	Tango::DevString
+//  *	Attr type:	Scalar
+//  */
+// //--------------------------------------------------------
+// void SlsDetectorControl::read_full_file_name(Tango::Attribute &attr)
+// {
+// 	DEBUG_STREAM << "SlsDetectorControl::read_full_file_name(Tango::Attribute &attr) entering... " << std::endl;
+//     /* clang-format on */
+// 	// build string
+// 	// default run File Name: [file name prefix]_d[module index]_f[file index]_[acquisition index].[file format] eg. run_d0_f0_5.raw
+// 	std::string file_name_prefix = detector_ptr->getFileNamePrefix().front();
+// 	int module_index = 0;
+// 	auto file_index = detector_ptr->getAcquisitionIndex().front();
+// 	auto file_format = detector_ptr->getFileFormat().front();
+// 	std::string full_string = file_name_prefix + "_d" + std::to_string(module_index) + "_f" + std::to_string(file_index) + "_" + std::to_string(file_format);
+// 	*attr_full_file_name_read = Tango::string_dup(full_string);
+// 	attr.set_value(attr_full_file_name_read);
+//     /* clang-format off */
 // }
 
 

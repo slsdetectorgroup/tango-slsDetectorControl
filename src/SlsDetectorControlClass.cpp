@@ -164,7 +164,7 @@ CORBA::Any *start_acquireClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(
 
 //--------------------------------------------------------
 /**
- * method : 		stop_acquireClass::execute()
+ * method : 		start_detectorClass::execute()
  * description : 	method to trigger the execution of the command.
  *
  * @param	device	The device on which the command must be executed
@@ -173,10 +173,10 @@ CORBA::Any *start_acquireClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(
  *	returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
-CORBA::Any *stop_acquireClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
+CORBA::Any *start_detectorClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	TANGO_LOG_INFO << "stop_acquireClass::execute(): arrived" << std::endl;
-	((static_cast<SlsDetectorControl *>(device))->stop_acquire());
+	TANGO_LOG_INFO << "start_detectorClass::execute(): arrived" << std::endl;
+	((static_cast<SlsDetectorControl *>(device))->start_detector());
 	return new CORBA::Any();
 }
 
@@ -200,7 +200,7 @@ CORBA::Any *start_receiverClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED
 
 //--------------------------------------------------------
 /**
- * method : 		stop_receiverClass::execute()
+ * method : 		stop_acquireClass::execute()
  * description : 	method to trigger the execution of the command.
  *
  * @param	device	The device on which the command must be executed
@@ -209,28 +209,10 @@ CORBA::Any *start_receiverClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED
  *	returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
-CORBA::Any *stop_receiverClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
+CORBA::Any *stop_acquireClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	TANGO_LOG_INFO << "stop_receiverClass::execute(): arrived" << std::endl;
-	((static_cast<SlsDetectorControl *>(device))->stop_receiver());
-	return new CORBA::Any();
-}
-
-//--------------------------------------------------------
-/**
- * method : 		start_detectorClass::execute()
- * description : 	method to trigger the execution of the command.
- *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
- *
- *	returns The command output data (packed in the Any object)
- */
-//--------------------------------------------------------
-CORBA::Any *start_detectorClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
-{
-	TANGO_LOG_INFO << "start_detectorClass::execute(): arrived" << std::endl;
-	((static_cast<SlsDetectorControl *>(device))->start_detector());
+	TANGO_LOG_INFO << "stop_acquireClass::execute(): arrived" << std::endl;
+	((static_cast<SlsDetectorControl *>(device))->stop_acquire());
 	return new CORBA::Any();
 }
 
@@ -249,6 +231,24 @@ CORBA::Any *stop_detectorClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(
 {
 	TANGO_LOG_INFO << "stop_detectorClass::execute(): arrived" << std::endl;
 	((static_cast<SlsDetectorControl *>(device))->stop_detector());
+	return new CORBA::Any();
+}
+
+//--------------------------------------------------------
+/**
+ * method : 		stop_receiverClass::execute()
+ * description : 	method to trigger the execution of the command.
+ *
+ * @param	device	The device on which the command must be executed
+ * @param	in_any	The command input data
+ *
+ *	returns The command output data (packed in the Any object)
+ */
+//--------------------------------------------------------
+CORBA::Any *stop_receiverClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
+{
+	TANGO_LOG_INFO << "stop_receiverClass::execute(): arrived" << std::endl;
+	((static_cast<SlsDetectorControl *>(device))->stop_receiver());
 	return new CORBA::Any();
 }
 
@@ -341,11 +341,10 @@ void SlsDetectorControlClass::set_default_property()
 	//	Set Default Class Properties
 
 	//	Set Default device Properties
-	prop_name = "DetectorId";
-	prop_desc = "Detector shared memory id Default value is 0. Can be set to more values for multiple detectors.It is important only if you are controlling multiple detectors from the same pc.";
-	prop_def  = "0";
+	prop_name = "ConfigurationPathDevString";
+	prop_desc = "Config file for Detector and Receiver objects from the slsDetectorPackage.";
+	prop_def  = "";
 	vect_data.clear();
-	vect_data.push_back("0");
 	if (prop_def.length()>0)
 	{
 		Tango::DbDatum	data(prop_name);
@@ -355,10 +354,11 @@ void SlsDetectorControlClass::set_default_property()
 	}
 	else
 		add_wiz_dev_prop(prop_name, prop_desc);
-	prop_name = "ConfigurationPathDevString";
-	prop_desc = "Config file for Detector and Receiver objects from the slsDetectorPackage.";
-	prop_def  = "";
+	prop_name = "DetectorId";
+	prop_desc = "Detector shared memory id Default value is 0. Can be set to more values for multiple detectors.It is important only if you are controlling multiple detectors from the same pc.";
+	prop_def  = "0";
 	vect_data.clear();
+	vect_data.push_back("0");
 	if (prop_def.length()>0)
 	{
 		Tango::DbDatum	data(prop_name);
@@ -574,10 +574,10 @@ void SlsDetectorControlClass::attribute_factory(std::vector<Tango::Attr *> &att_
 	Tango::UserDefaultAttrProp	exptime_prop;
 	//	description	not set for exptime
 	//	label	not set for exptime
-	//	unit	not set for exptime
+	exptime_prop.set_unit("s");
 	//	standard_unit	not set for exptime
 	//	display_unit	not set for exptime
-	//	format	not set for exptime
+	exptime_prop.set_format("%5.2e");
 	//	max_value	not set for exptime
 	//	min_value	not set for exptime
 	//	max_alarm	not set for exptime
@@ -715,7 +715,7 @@ void SlsDetectorControlClass::attribute_factory(std::vector<Tango::Attr *> &att_
 	//	unit	not set for firmware_version
 	//	standard_unit	not set for firmware_version
 	//	display_unit	not set for firmware_version
-	//	format	not set for firmware_version
+	firmware_version_prop.set_format("%05X");
 	//	max_value	not set for firmware_version
 	//	min_value	not set for firmware_version
 	//	max_alarm	not set for firmware_version
@@ -730,39 +730,16 @@ void SlsDetectorControlClass::attribute_factory(std::vector<Tango::Attr *> &att_
 	//	Not Memorized
 	att_list.push_back(firmware_version);
 
-	//	Attribute : full_file_name
-	full_file_nameAttrib	*full_file_name = new full_file_nameAttrib();
-	Tango::UserDefaultAttrProp	full_file_name_prop;
-	//	description	not set for full_file_name
-	//	label	not set for full_file_name
-	//	unit	not set for full_file_name
-	//	standard_unit	not set for full_file_name
-	//	display_unit	not set for full_file_name
-	//	format	not set for full_file_name
-	//	max_value	not set for full_file_name
-	//	min_value	not set for full_file_name
-	//	max_alarm	not set for full_file_name
-	//	min_alarm	not set for full_file_name
-	//	max_warning	not set for full_file_name
-	//	min_warning	not set for full_file_name
-	//	delta_t	not set for full_file_name
-	//	delta_val	not set for full_file_name
-	full_file_name->set_default_properties(full_file_name_prop);
-	//	Not Polled
-	full_file_name->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(full_file_name);
-
 	//	Attribute : high_voltage
 	high_voltageAttrib	*high_voltage = new high_voltageAttrib();
 	Tango::UserDefaultAttrProp	high_voltage_prop;
 	//	description	not set for high_voltage
 	//	label	not set for high_voltage
-	//	unit	not set for high_voltage
+	high_voltage_prop.set_unit("V");
 	//	standard_unit	not set for high_voltage
 	//	display_unit	not set for high_voltage
 	//	format	not set for high_voltage
-	//	max_value	not set for high_voltage
+	high_voltage_prop.set_max_value("200");
 	//	min_value	not set for high_voltage
 	//	max_alarm	not set for high_voltage
 	//	min_alarm	not set for high_voltage
@@ -832,7 +809,7 @@ void SlsDetectorControlClass::attribute_factory(std::vector<Tango::Attr *> &att_
 	//	display_unit	not set for num_frames
 	//	format	not set for num_frames
 	//	max_value	not set for num_frames
-	//	min_value	not set for num_frames
+	num_frames_prop.set_min_value("0");
 	//	max_alarm	not set for num_frames
 	//	min_alarm	not set for num_frames
 	//	max_warning	not set for num_frames
@@ -855,7 +832,7 @@ void SlsDetectorControlClass::attribute_factory(std::vector<Tango::Attr *> &att_
 	//	display_unit	not set for num_frames_per_file
 	//	format	not set for num_frames_per_file
 	//	max_value	not set for num_frames_per_file
-	//	min_value	not set for num_frames_per_file
+	num_frames_per_file_prop.set_min_value("0");
 	//	max_alarm	not set for num_frames_per_file
 	//	min_alarm	not set for num_frames_per_file
 	//	max_warning	not set for num_frames_per_file
@@ -878,7 +855,7 @@ void SlsDetectorControlClass::attribute_factory(std::vector<Tango::Attr *> &att_
 	//	display_unit	not set for num_triggers
 	//	format	not set for num_triggers
 	//	max_value	not set for num_triggers
-	//	min_value	not set for num_triggers
+	num_triggers_prop.set_min_value("0");
 	//	max_alarm	not set for num_triggers
 	//	min_alarm	not set for num_triggers
 	//	max_warning	not set for num_triggers
@@ -919,10 +896,10 @@ void SlsDetectorControlClass::attribute_factory(std::vector<Tango::Attr *> &att_
 	Tango::UserDefaultAttrProp	period_prop;
 	//	description	not set for period
 	//	label	not set for period
-	//	unit	not set for period
+	period_prop.set_unit("s");
 	//	standard_unit	not set for period
 	//	display_unit	not set for period
-	//	format	not set for period
+	period_prop.set_format("%5.3e");
 	//	max_value	not set for period
 	//	min_value	not set for period
 	//	max_alarm	not set for period
@@ -1049,8 +1026,6 @@ void SlsDetectorControlClass::command_factory()
     //	Add your own code
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControlClass::command_factory_before
-
-
 	//	Command start_acquire
 	start_acquireClass	*pstart_acquireCmd =
 		new start_acquireClass("start_acquire",
@@ -1059,33 +1034,6 @@ void SlsDetectorControlClass::command_factory()
 			"",
 			Tango::OPERATOR);
 	command_list.push_back(pstart_acquireCmd);
-
-	//	Command stop_acquire
-	stop_acquireClass	*pstop_acquireCmd =
-		new stop_acquireClass("stop_acquire",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pstop_acquireCmd);
-
-	//	Command start_receiver
-	start_receiverClass	*pstart_receiverCmd =
-		new start_receiverClass("start_receiver",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::EXPERT);
-	command_list.push_back(pstart_receiverCmd);
-
-	//	Command stop_receiver
-	stop_receiverClass	*pstop_receiverCmd =
-		new stop_receiverClass("stop_receiver",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::EXPERT);
-	command_list.push_back(pstop_receiverCmd);
 
 	//	Command start_detector
 	start_detectorClass	*pstart_detectorCmd =
@@ -1096,6 +1044,24 @@ void SlsDetectorControlClass::command_factory()
 			Tango::EXPERT);
 	command_list.push_back(pstart_detectorCmd);
 
+	//	Command start_receiver
+	start_receiverClass	*pstart_receiverCmd =
+		new start_receiverClass("start_receiver",
+			Tango::DEV_VOID, Tango::DEV_VOID,
+			"",
+			"",
+			Tango::EXPERT);
+	command_list.push_back(pstart_receiverCmd);
+
+	//	Command stop_acquire
+	stop_acquireClass	*pstop_acquireCmd =
+		new stop_acquireClass("stop_acquire",
+			Tango::DEV_VOID, Tango::DEV_VOID,
+			"",
+			"",
+			Tango::OPERATOR);
+	command_list.push_back(pstop_acquireCmd);
+
 	//	Command stop_detector
 	stop_detectorClass	*pstop_detectorCmd =
 		new stop_detectorClass("stop_detector",
@@ -1104,6 +1070,17 @@ void SlsDetectorControlClass::command_factory()
 			"",
 			Tango::EXPERT);
 	command_list.push_back(pstop_detectorCmd);
+
+	//	Command stop_receiver
+	stop_receiverClass	*pstop_receiverCmd =
+		new stop_receiverClass("stop_receiver",
+			Tango::DEV_VOID, Tango::DEV_VOID,
+			"",
+			"",
+			Tango::EXPERT);
+	command_list.push_back(pstop_receiverCmd);
+
+
 
 	/*----- PROTECTED REGION ID(SlsDetectorControlClass::command_factory_after) ENABLED START -----*/
     /* clang-format on */

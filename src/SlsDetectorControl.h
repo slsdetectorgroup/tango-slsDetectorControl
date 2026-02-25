@@ -26,6 +26,7 @@
 #include <map>
 #include <tango/tango.h>
 using std::map;
+#include <chrono>
 #include <string>
 #include <variant>
 #include <vector>
@@ -35,9 +36,15 @@ using std::map;
 #include <sls/ToString.h>
 #include <sls/sls_detector_defs.h>
 #include <sls/sls_detector_exceptions.h>
+
+using std::chrono_literals::operator""s;
 using dacIndex = sls::defs::dacIndex;
 using detectorType = sls::defs::detectorType;
-
+using speedLevel = sls::defs::speedLevel;
+using timingMode = sls::defs::timingMode;
+using detectorSettings = sls::defs::detectorSettings;
+using fileFormat = sls::defs::fileFormat;
+using runStatus = sls::defs::runStatus;
 /* clang-format off */
 /*----- PROTECTED REGION END -----*/	//	SlsDetectorControl.h
 
@@ -63,6 +70,10 @@ enum class _detector_settingEnum : short {
 } ;
 typedef _detector_settingEnum detector_settingEnum;
 
+enum class _file_formatEnum : short {
+} ;
+typedef _file_formatEnum file_formatEnum;
+
 enum class _readout_speedEnum : short {
 } ;
 typedef _readout_speedEnum readout_speedEnum;
@@ -77,12 +88,8 @@ typedef _timing_modeEnum timing_modeEnum;
 struct attribute_info
 {
     bool available;
-    // std::function<void()> checkFunction;
     std::function<bool()> checkFunction;
     std::function<void(std::string)> registerFunction;
-    // std::variant<std::function<void(std::string)>,
-    // std::function<void(std::string,std::unique_ptr<SlsTangoEnumAdapter<std::variant<sls::defs::timingMode,
-    // sls::defs::detectorSettings>&>>)>> registerFunction;
 };
 
 template <typename T>
@@ -149,6 +156,15 @@ class SlsDetectorControl : public TANGO_BASE_CLASS
               return true;
           },
           [this](std::string name) { this->add_delay_after_trigger_dynamic_attribute(name); }}},
+        {"file_format",
+         {true,
+          [this]()
+          {
+              this->fileFormatAdapter_ptr = std::make_unique<SlsTangoEnumAdapter<fileFormat>>(
+                  std::initializer_list{fileFormat::BINARY, fileFormat::HDF5});
+              return true;
+          },
+          [this](std::string name) { this->add_file_format_dynamic_attribute(name, this->fileFormatAdapter_ptr); }}},
         {"num_frames_left",
          {true,
           [this]()
@@ -178,7 +194,7 @@ class SlsDetectorControl : public TANGO_BASE_CLASS
           [this]()
           {
               auto list = this->detector_ptr->getReadoutSpeedList();
-              this->readoutSpeedAdapter_ptr = std::make_unique<SlsTangoEnumAdapter<sls::defs::speedLevel>>(list);
+              this->readoutSpeedAdapter_ptr = std::make_unique<SlsTangoEnumAdapter<speedLevel>>(list);
               return true;
           },
           [this](std::string name)
@@ -260,7 +276,7 @@ class SlsDetectorControl : public TANGO_BASE_CLASS
           [this]()
           {
               auto list = this->detector_ptr->getTimingModeList();
-              this->timingModeAdapter_ptr = std::make_unique<SlsTangoEnumAdapter<sls::defs::timingMode>>(list);
+              this->timingModeAdapter_ptr = std::make_unique<SlsTangoEnumAdapter<timingMode>>(list);
               return true;
           },
           [this](std::string name) { this->add_timing_mode_dynamic_attribute(name, this->timingModeAdapter_ptr); }}},
@@ -269,8 +285,7 @@ class SlsDetectorControl : public TANGO_BASE_CLASS
           [this]()
           {
               auto list = this->detector_ptr->getSettingsList();
-              this->detectorSettingsAdapter_ptr =
-                  std::make_unique<SlsTangoEnumAdapter<sls::defs::detectorSettings>>(list);
+              this->detectorSettingsAdapter_ptr = std::make_unique<SlsTangoEnumAdapter<detectorSettings>>(list);
               // [Eiger] Use threshold command. Settings loaded from file found
               // in settingspath
               return this->detector_ptr->getDetectorType().front() != detectorType::EIGER;
@@ -284,19 +299,19 @@ class SlsDetectorControl : public TANGO_BASE_CLASS
      * enums can have different values. Thus, we need to keep a mapping between
      * the tango enum values and the sls enum values.
      */
-    std::unique_ptr<SlsTangoEnumAdapter<sls::defs::speedLevel>> readoutSpeedAdapter_ptr;
-    std::unique_ptr<SlsTangoEnumAdapter<sls::defs::detectorSettings>> detectorSettingsAdapter_ptr;
-    std::unique_ptr<SlsTangoEnumAdapter<sls::defs::timingMode>> timingModeAdapter_ptr;
-
+    std::unique_ptr<SlsTangoEnumAdapter<speedLevel>> readoutSpeedAdapter_ptr;
+    std::unique_ptr<SlsTangoEnumAdapter<detectorSettings>> detectorSettingsAdapter_ptr;
+    std::unique_ptr<SlsTangoEnumAdapter<timingMode>> timingModeAdapter_ptr;
+    std::unique_ptr<SlsTangoEnumAdapter<fileFormat>> fileFormatAdapter_ptr;
     /* clang-format off */
 /*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::Data Members
 
 //	Device property data members
 public:
-	//	DetectorId:	Detector shared memory id Default value is 0. Can be set to more values for multiple detectors.It is important only if you are controlling multiple detectors from the same pc.
-	Tango::DevLong	detectorId;
 	//	ConfigurationPathDevString:	Config file for Detector and Receiver objects from the slsDetectorPackage.
 	std::string	configurationPathDevString;
+	//	DetectorId:	Detector shared memory id Default value is 0. Can be set to more values for multiple detectors.It is important only if you are controlling multiple detectors from the same pc.
+	Tango::DevLong	detectorId;
 	//	GainMapPaths:	Gain map files for each module.
 	std::vector<std::string>	gainMapPaths;
 	//	PixelMaskPaths:	Pixel map files for each module.
@@ -316,7 +331,6 @@ public:
 	Tango::DevString	*attr_file_path_read;
 	Tango::DevBoolean	*attr_file_write_read;
 	Tango::DevLong64	*attr_firmware_version_read;
-	Tango::DevString	*attr_full_file_name_read;
 	Tango::DevLong	*attr_high_voltage_read;
 	Tango::DevString	*attr_hostname_read;
 	Tango::DevBoolean	*attr_master_file_write_read;
@@ -447,7 +461,6 @@ public:
  *	Attr type:	Scalar
  */
 	virtual void read_file_name(Tango::Attribute &attr);
-	virtual void write_file_name(Tango::WAttribute &attr);
 	virtual bool is_file_name_allowed(Tango::AttReqType type);
 /**
  *	Attribute file_name_prefix related methods
@@ -498,15 +511,6 @@ public:
  */
 	virtual void read_firmware_version(Tango::Attribute &attr);
 	virtual bool is_firmware_version_allowed(Tango::AttReqType type);
-/**
- *	Attribute full_file_name related methods
- *
- *
- *	Data type:  Tango::DevString
- *	Attr type:	Scalar
- */
-	virtual void read_full_file_name(Tango::Attribute &attr);
-	virtual bool is_full_file_name_allowed(Tango::AttReqType type);
 /**
  *	Attribute high_voltage related methods
  *
@@ -661,6 +665,21 @@ public:
 	void remove_detector_setting_dynamic_attribute(std::string attname);
 	Tango::DevEnum *get_detector_setting_data_ptr(std::string &name);
 	map<std::string,Tango::DevEnum>	   detector_setting_data;
+
+	/**
+	 *	Attribute file_format related methods
+	 *
+	 *
+	 *	Data type:  Tango::DevEnum
+	 *	Attr type:	Scalar
+	 */
+	virtual void read_file_format(Tango::Attribute &attr);
+	virtual void write_file_format(Tango::WAttribute &attr);
+	virtual bool is_file_format_allowed(Tango::AttReqType type);
+	void add_file_format_dynamic_attribute(std::string attname);
+	void remove_file_format_dynamic_attribute(std::string attname);
+	Tango::DevEnum *get_file_format_data_ptr(std::string &name);
+	map<std::string,Tango::DevEnum>	   file_format_data;
 
 	/**
 	 *	Attribute num_frames_left related methods
@@ -898,12 +917,12 @@ public:
 	virtual void start_acquire();
 	virtual bool is_start_acquire_allowed(const CORBA::Any &any);
 	/**
-	 *	Command stop_acquire related method
+	 *	Command start_detector related method
 	 *
 	 *
 	 */
-	virtual void stop_acquire();
-	virtual bool is_stop_acquire_allowed(const CORBA::Any &any);
+	virtual void start_detector();
+	virtual bool is_start_detector_allowed(const CORBA::Any &any);
 	/**
 	 *	Command start_receiver related method
 	 *
@@ -912,19 +931,12 @@ public:
 	virtual void start_receiver();
 	virtual bool is_start_receiver_allowed(const CORBA::Any &any);
 	/**
-	 *	Command stop_receiver related method
+	 *	Command stop_acquire related method
 	 *
 	 *
 	 */
-	virtual void stop_receiver();
-	virtual bool is_stop_receiver_allowed(const CORBA::Any &any);
-	/**
-	 *	Command start_detector related method
-	 *
-	 *
-	 */
-	virtual void start_detector();
-	virtual bool is_start_detector_allowed(const CORBA::Any &any);
+	virtual void stop_acquire();
+	virtual bool is_stop_acquire_allowed(const CORBA::Any &any);
 	/**
 	 *	Command stop_detector related method
 	 *
@@ -932,6 +944,13 @@ public:
 	 */
 	virtual void stop_detector();
 	virtual bool is_stop_detector_allowed(const CORBA::Any &any);
+	/**
+	 *	Command stop_receiver related method
+	 *
+	 *
+	 */
+	virtual void stop_receiver();
+	virtual bool is_stop_receiver_allowed(const CORBA::Any &any);
 
 //	Dynamic commands methods
 public:
@@ -956,13 +975,15 @@ public:
 
 /*----- PROTECTED REGION ID(SlsDetectorControl::Additional Method prototypes) ENABLED START -----*/
     /* clang-format on */
-    //	Additional Method prototypes
-    void add_readout_speed_dynamic_attribute(
-        std::string attname, std::unique_ptr<SlsTangoEnumAdapter<sls::defs::speedLevel>> &slsEnumAdapter_ptr);
+    void check_stop_in_background_acquisition();
+    void add_readout_speed_dynamic_attribute(std::string attname,
+                                             std::unique_ptr<SlsTangoEnumAdapter<speedLevel>> &slsEnumAdapter_ptr);
     void add_detector_setting_dynamic_attribute(
-        std::string attname, std::unique_ptr<SlsTangoEnumAdapter<sls::defs::detectorSettings>> &slsEnumAdapter_ptr);
-    void add_timing_mode_dynamic_attribute(
-        std::string attname, std::unique_ptr<SlsTangoEnumAdapter<sls::defs::timingMode>> &slsEnumAdapter_ptr);
+        std::string attname, std::unique_ptr<SlsTangoEnumAdapter<detectorSettings>> &slsEnumAdapter_ptr);
+    void add_timing_mode_dynamic_attribute(std::string attname,
+                                           std::unique_ptr<SlsTangoEnumAdapter<timingMode>> &slsEnumAdapter_ptr);
+    void add_file_format_dynamic_attribute(std::string attname,
+                                           std::unique_ptr<SlsTangoEnumAdapter<fileFormat>> &slsEnumAdapter_ptr);
 
     /* clang-format off */
 /*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::Additional Method prototypes

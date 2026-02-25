@@ -132,11 +132,6 @@ bool SlsDetectorControl::is_exptime_allowed(TANGO_UNUSED(Tango::AttReqType type)
 //--------------------------------------------------------
 bool SlsDetectorControl::is_file_name_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
-	//	Not any excluded states for file_name attribute in Write access.
-	/*----- PROTECTED REGION ID(SlsDetectorControl::file_nameStateAllowed_WRITE) ENABLED START -----*/
-    /* clang-format on */
-    /* clang-format off */
-	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::file_nameStateAllowed_WRITE
 
 	//	Not any excluded states for file_name attribute in read access.
 	/*----- PROTECTED REGION ID(SlsDetectorControl::file_nameStateAllowed_READ) ENABLED START -----*/
@@ -248,23 +243,6 @@ bool SlsDetectorControl::is_firmware_version_allowed(TANGO_UNUSED(Tango::AttReqT
     /* clang-format on */
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::firmware_versionStateAllowed_READ
-	return true;
-}
-
-//--------------------------------------------------------
-/**
- *	Method      : SlsDetectorControl::is_full_file_name_allowed()
- * Description:  Execution allowed for full_file_name attribute
- */
-//--------------------------------------------------------
-bool SlsDetectorControl::is_full_file_name_allowed(TANGO_UNUSED(Tango::AttReqType type))
-{
-
-	//	Not any excluded states for full_file_name attribute in read access.
-	/*----- PROTECTED REGION ID(SlsDetectorControl::full_file_nameStateAllowed_READ) ENABLED START -----*/
-    /* clang-format on */
-    /* clang-format off */
-	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::full_file_nameStateAllowed_READ
 	return true;
 }
 
@@ -553,6 +531,28 @@ bool SlsDetectorControl::is_detector_setting_allowed(TANGO_UNUSED(Tango::AttReqT
     /* clang-format on */
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::detector_settingStateAllowed_READ
+	return true;
+}
+
+//--------------------------------------------------------
+/**
+ *	Method      : SlsDetectorControl::is_file_format_allowed()
+ * Description:  Execution allowed for file_format attribute
+ */
+//--------------------------------------------------------
+bool SlsDetectorControl::is_file_format_allowed(TANGO_UNUSED(Tango::AttReqType type))
+{
+	//	Not any excluded states for file_format attribute in Write access.
+	/*----- PROTECTED REGION ID(SlsDetectorControl::file_formatStateAllowed_WRITE) ENABLED START -----*/
+    /* clang-format on */
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::file_formatStateAllowed_WRITE
+
+	//	Not any excluded states for file_format attribute in read access.
+	/*----- PROTECTED REGION ID(SlsDetectorControl::file_formatStateAllowed_READ) ENABLED START -----*/
+    /* clang-format on */
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::file_formatStateAllowed_READ
 	return true;
 }
 
@@ -859,17 +859,17 @@ bool SlsDetectorControl::is_start_acquire_allowed(TANGO_UNUSED(const CORBA::Any 
 
 //--------------------------------------------------------
 /**
- *	Method      : SlsDetectorControl::is_stop_acquire_allowed()
- * Description:  Execution allowed for stop_acquire attribute
+ *	Method      : SlsDetectorControl::is_start_detector_allowed()
+ * Description:  Execution allowed for start_detector attribute
  */
 //--------------------------------------------------------
-bool SlsDetectorControl::is_stop_acquire_allowed(TANGO_UNUSED(const CORBA::Any &any))
+bool SlsDetectorControl::is_start_detector_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-	//	Not any excluded states for stop_acquire command.
-	/*----- PROTECTED REGION ID(SlsDetectorControl::stop_acquireStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for start_detector command.
+	/*----- PROTECTED REGION ID(SlsDetectorControl::start_detectorStateAllowed) ENABLED START -----*/
     /* clang-format on */
     /* clang-format off */
-	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::stop_acquireStateAllowed
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::start_detectorStateAllowed
 	return true;
 }
 
@@ -891,33 +891,17 @@ bool SlsDetectorControl::is_start_receiver_allowed(TANGO_UNUSED(const CORBA::Any
 
 //--------------------------------------------------------
 /**
- *	Method      : SlsDetectorControl::is_stop_receiver_allowed()
- * Description:  Execution allowed for stop_receiver attribute
+ *	Method      : SlsDetectorControl::is_stop_acquire_allowed()
+ * Description:  Execution allowed for stop_acquire attribute
  */
 //--------------------------------------------------------
-bool SlsDetectorControl::is_stop_receiver_allowed(TANGO_UNUSED(const CORBA::Any &any))
+bool SlsDetectorControl::is_stop_acquire_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-	//	Not any excluded states for stop_receiver command.
-	/*----- PROTECTED REGION ID(SlsDetectorControl::stop_receiverStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for stop_acquire command.
+	/*----- PROTECTED REGION ID(SlsDetectorControl::stop_acquireStateAllowed) ENABLED START -----*/
     /* clang-format on */
     /* clang-format off */
-	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::stop_receiverStateAllowed
-	return true;
-}
-
-//--------------------------------------------------------
-/**
- *	Method      : SlsDetectorControl::is_start_detector_allowed()
- * Description:  Execution allowed for start_detector attribute
- */
-//--------------------------------------------------------
-bool SlsDetectorControl::is_start_detector_allowed(TANGO_UNUSED(const CORBA::Any &any))
-{
-	//	Not any excluded states for start_detector command.
-	/*----- PROTECTED REGION ID(SlsDetectorControl::start_detectorStateAllowed) ENABLED START -----*/
-    /* clang-format on */
-    /* clang-format off */
-	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::start_detectorStateAllowed
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::stop_acquireStateAllowed
 	return true;
 }
 
@@ -934,6 +918,22 @@ bool SlsDetectorControl::is_stop_detector_allowed(TANGO_UNUSED(const CORBA::Any 
     /* clang-format on */
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::stop_detectorStateAllowed
+	return true;
+}
+
+//--------------------------------------------------------
+/**
+ *	Method      : SlsDetectorControl::is_stop_receiver_allowed()
+ * Description:  Execution allowed for stop_receiver attribute
+ */
+//--------------------------------------------------------
+bool SlsDetectorControl::is_stop_receiver_allowed(TANGO_UNUSED(const CORBA::Any &any))
+{
+	//	Not any excluded states for stop_receiver command.
+	/*----- PROTECTED REGION ID(SlsDetectorControl::stop_receiverStateAllowed) ENABLED START -----*/
+    /* clang-format on */
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::stop_receiverStateAllowed
 	return true;
 }
 

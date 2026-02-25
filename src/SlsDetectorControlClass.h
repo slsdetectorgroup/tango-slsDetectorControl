@@ -108,12 +108,10 @@ class file_nameAttrib: public Tango::Attr
 {
 public:
 	file_nameAttrib():Attr("file_name",
-			Tango::DEV_STRING, Tango::READ_WRITE) {};
+			Tango::DEV_STRING, Tango::READ) {};
 	~file_nameAttrib() {};
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<SlsDetectorControl *>(dev))->read_file_name(att);}
-	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
-		{(static_cast<SlsDetectorControl *>(dev))->write_file_name(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<SlsDetectorControl *>(dev))->is_file_name_allowed(ty);}
 };
@@ -189,19 +187,6 @@ public:
 		{(static_cast<SlsDetectorControl *>(dev))->read_firmware_version(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<SlsDetectorControl *>(dev))->is_firmware_version_allowed(ty);}
-};
-
-//	Attribute full_file_name class definition
-class full_file_nameAttrib: public Tango::Attr
-{
-public:
-	full_file_nameAttrib():Attr("full_file_name",
-			Tango::DEV_STRING, Tango::READ) {};
-	~full_file_nameAttrib() {};
-	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
-		{(static_cast<SlsDetectorControl *>(dev))->read_full_file_name(att);}
-	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
-		{return (static_cast<SlsDetectorControl *>(dev))->is_full_file_name_allowed(ty);}
 };
 
 //	Attribute high_voltage class definition
@@ -412,6 +397,23 @@ public:
 		{return (static_cast<SlsDetectorControl *>(dev))->is_detector_setting_allowed(ty);}
 	virtual bool same_type(const std::type_info &in_type) {return typeid(detector_settingEnum) == in_type;}
 	virtual std::string get_enum_type() {return std::string("detector_settingEnum");}
+};
+
+//	Attribute file_format class definition
+class file_formatAttrib: public Tango::Attr
+{
+public:
+	file_formatAttrib(const std::string &att_name):Attr(att_name.c_str(),
+			Tango::DEV_ENUM, Tango::READ_WRITE) {};
+	~file_formatAttrib() {};
+	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
+		{(static_cast<SlsDetectorControl *>(dev))->read_file_format(att);}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<SlsDetectorControl *>(dev))->write_file_format(att);}
+	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
+		{return (static_cast<SlsDetectorControl *>(dev))->is_file_format_allowed(ty);}
+	virtual bool same_type(const std::type_info &in_type) {return typeid(file_formatEnum) == in_type;}
+	virtual std::string get_enum_type() {return std::string("file_formatEnum");}
 };
 
 //	Attribute num_frames_left class definition
@@ -652,11 +654,11 @@ public:
 	{return (static_cast<SlsDetectorControl *>(dev))->is_start_acquire_allowed(any);}
 };
 
-//	Command stop_acquire class definition
-class stop_acquireClass : public Tango::Command
+//	Command start_detector class definition
+class start_detectorClass : public Tango::Command
 {
 public:
-	stop_acquireClass(const char   *cmd_name,
+	start_detectorClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out,
 				   const char        *in_desc,
@@ -664,15 +666,15 @@ public:
 				   Tango::DispLevel  level)
 	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
 
-	stop_acquireClass(const char   *cmd_name,
+	start_detectorClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
 	:Command(cmd_name,in,out)	{};
-	~stop_acquireClass() {};
+	~start_detectorClass() {};
 
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
-	{return (static_cast<SlsDetectorControl *>(dev))->is_stop_acquire_allowed(any);}
+	{return (static_cast<SlsDetectorControl *>(dev))->is_start_detector_allowed(any);}
 };
 
 //	Command start_receiver class definition
@@ -698,11 +700,11 @@ public:
 	{return (static_cast<SlsDetectorControl *>(dev))->is_start_receiver_allowed(any);}
 };
 
-//	Command stop_receiver class definition
-class stop_receiverClass : public Tango::Command
+//	Command stop_acquire class definition
+class stop_acquireClass : public Tango::Command
 {
 public:
-	stop_receiverClass(const char   *cmd_name,
+	stop_acquireClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out,
 				   const char        *in_desc,
@@ -710,38 +712,15 @@ public:
 				   Tango::DispLevel  level)
 	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
 
-	stop_receiverClass(const char   *cmd_name,
+	stop_acquireClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
 	:Command(cmd_name,in,out)	{};
-	~stop_receiverClass() {};
+	~stop_acquireClass() {};
 
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
-	{return (static_cast<SlsDetectorControl *>(dev))->is_stop_receiver_allowed(any);}
-};
-
-//	Command start_detector class definition
-class start_detectorClass : public Tango::Command
-{
-public:
-	start_detectorClass(const char   *cmd_name,
-	               Tango::CmdArgType in,
-				   Tango::CmdArgType out,
-				   const char        *in_desc,
-				   const char        *out_desc,
-				   Tango::DispLevel  level)
-	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
-
-	start_detectorClass(const char   *cmd_name,
-	               Tango::CmdArgType in,
-				   Tango::CmdArgType out)
-	:Command(cmd_name,in,out)	{};
-	~start_detectorClass() {};
-
-	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
-	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
-	{return (static_cast<SlsDetectorControl *>(dev))->is_start_detector_allowed(any);}
+	{return (static_cast<SlsDetectorControl *>(dev))->is_stop_acquire_allowed(any);}
 };
 
 //	Command stop_detector class definition
@@ -765,6 +744,29 @@ public:
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<SlsDetectorControl *>(dev))->is_stop_detector_allowed(any);}
+};
+
+//	Command stop_receiver class definition
+class stop_receiverClass : public Tango::Command
+{
+public:
+	stop_receiverClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out,
+				   const char        *in_desc,
+				   const char        *out_desc,
+				   Tango::DispLevel  level)
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
+
+	stop_receiverClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out)
+	:Command(cmd_name,in,out)	{};
+	~stop_receiverClass() {};
+
+	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
+	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
+	{return (static_cast<SlsDetectorControl *>(dev))->is_stop_receiver_allowed(any);}
 };
 
 

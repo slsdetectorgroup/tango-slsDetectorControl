@@ -34,6 +34,7 @@
 //  adc_phase            |  Tango::DevLong	Scalar
 //  delay_after_trigger  |  Tango::DevDouble	Scalar
 //  detector_setting     |  Tango::DevEnum	Scalar
+//  file_format          |  Tango::DevEnum	Scalar
 //  num_frames_left      |  Tango::DevLong64	Scalar
 //  num_triggers_left    |  Tango::DevLong	Scalar
 //  power_chip           |  Tango::DevBoolean	Scalar
@@ -82,7 +83,7 @@ void SlsDetectorControl::add_adc_phase_dynamic_attribute(std::string attname)
 	Tango::UserDefaultAttrProp	adc_phase_prop;
 	//	description	not set for adc_phase
 	//	label	not set for adc_phase
-	//	unit	not set for adc_phase
+	adc_phase_prop.set_unit("°");
 	//	standard_unit	not set for adc_phase
 	//	display_unit	not set for adc_phase
 	//	format	not set for adc_phase
@@ -141,12 +142,12 @@ void SlsDetectorControl::add_delay_after_trigger_dynamic_attribute(std::string a
 	Tango::UserDefaultAttrProp	delay_after_trigger_prop;
 	//	description	not set for delay_after_trigger
 	//	label	not set for delay_after_trigger
-	//	unit	not set for delay_after_trigger
+	delay_after_trigger_prop.set_unit("s");
 	//	standard_unit	not set for delay_after_trigger
 	//	display_unit	not set for delay_after_trigger
-	//	format	not set for delay_after_trigger
+	delay_after_trigger_prop.set_format("%5.3e");
 	//	max_value	not set for delay_after_trigger
-	//	min_value	not set for delay_after_trigger
+	delay_after_trigger_prop.set_min_value("0");
 	//	max_alarm	not set for delay_after_trigger
 	//	min_alarm	not set for delay_after_trigger
 	//	max_warning	not set for delay_after_trigger
@@ -244,6 +245,65 @@ void SlsDetectorControl::remove_detector_setting_dynamic_attribute(std::string a
         /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_detector_setting_dynamic_attribute
 		detector_setting_data.erase(ite);
+	}
+}
+//--------------------------------------------------------
+/**
+ *	Add a file_format dynamic attribute.
+ *
+ *  parameter attname: attribute name to be created and added.
+ */
+//--------------------------------------------------------
+void SlsDetectorControl::add_file_format_dynamic_attribute(std::string attname)
+{
+	//	Attribute : file_format
+	file_formatAttrib	*file_format = new file_formatAttrib(attname);
+	Tango::UserDefaultAttrProp	file_format_prop;
+	//	description	not set for file_format
+	//	label	not set for file_format
+	//	unit	not set for file_format
+	//	standard_unit	not set for file_format
+	//	display_unit	not set for file_format
+	//	format	not set for file_format
+	//	max_value	not set for file_format
+	//	min_value	not set for file_format
+	//	max_alarm	not set for file_format
+	//	min_alarm	not set for file_format
+	//	max_warning	not set for file_format
+	//	min_warning	not set for file_format
+	//	delta_t	not set for file_format
+	//	delta_val	not set for file_format
+	/*----- PROTECTED REGION ID(SlsDetectorControl::att_file_format_dynamic_attribute) ENABLED START -----*/
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_file_format_dynamic_attribute
+	file_format->set_default_properties(file_format_prop);
+	//	Not Polled
+	file_format->set_disp_level(Tango::OPERATOR);
+	//	Not Memorized
+	file_format_data.insert(make_pair(attname, 0));
+	add_attribute(file_format);
+}
+//--------------------------------------------------------
+/**
+ *	remove a file_format dynamic attribute.
+ *
+ *  parameter attname: attribute name to be removed.
+ */
+//--------------------------------------------------------
+void SlsDetectorControl::remove_file_format_dynamic_attribute(std::string attname)
+{
+	remove_attribute(attname, true, Tango::Util::instance()->_UseDb);
+	map<std::string,Tango::DevEnum>::iterator ite;
+	if ((ite=file_format_data.find(attname))!=file_format_data.end())
+	{
+		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_file_format_dynamic_attribute) ENABLED START -----*/
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
+		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_file_format_dynamic_attribute
+		file_format_data.erase(ite);
 	}
 }
 //--------------------------------------------------------
@@ -1203,6 +1263,27 @@ Tango::DevEnum *SlsDetectorControl::get_detector_setting_data_ptr(std::string &n
 					(const char *)"ATTRIBUTE_NOT_FOUND",
 					tms.str().c_str(),
 					(const char *)"SlsDetectorControl::get_detector_setting_data_ptr()");
+	}
+	return  &(ite->second);
+}
+//--------------------------------------------------------
+/**
+ *	Return a pointer on file_format data.
+ *
+ *  parameter attname: the specified attribute name.
+ */
+//--------------------------------------------------------
+Tango::DevEnum *SlsDetectorControl::get_file_format_data_ptr(std::string &name)
+{
+	map<std::string,Tango::DevEnum>::iterator ite;
+	if ((ite=file_format_data.find(name))==file_format_data.end())
+	{
+		TangoSys_OMemStream	tms;
+		tms << "Dynamic attribute " << name << " has not been created";
+		Tango::Except::throw_exception(
+					(const char *)"ATTRIBUTE_NOT_FOUND",
+					tms.str().c_str(),
+					(const char *)"SlsDetectorControl::get_file_format_data_ptr()");
 	}
 	return  &(ite->second);
 }
