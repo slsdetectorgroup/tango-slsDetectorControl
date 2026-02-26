@@ -1243,6 +1243,27 @@ void SlsDetectorControl::write_detector_setting(Tango::WAttribute &attr)
 }
 //--------------------------------------------------------
 /**
+ *	Read attribute detector_status related method
+ *
+ *
+ *	Data type:	Tango::DevEnum (detector_statusEnum)
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void SlsDetectorControl::read_detector_status(Tango::Attribute &attr)
+{
+	DEBUG_STREAM << "SlsDetectorControl::read_detector_status(Tango::Attribute &attr) entering... " << std::endl;
+	Tango::DevEnum	*att_value = get_detector_status_data_ptr(attr.get_name());
+	/*----- PROTECTED REGION ID(SlsDetectorControl::read_detector_status) ENABLED START -----*/
+    /* clang-format on */
+    auto det_status = detector_ptr->getDetectorStatus().front();
+    *att_value = detStatusAdapter_ptr->toTangoEnum(det_status);
+    attr.set_value(att_value);
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_detector_status
+}
+//--------------------------------------------------------
+/**
  *	Read attribute file_format related method
  *
  *
@@ -1416,6 +1437,27 @@ void SlsDetectorControl::write_readout_speed(Tango::WAttribute &attr)
     detector_ptr->setReadoutSpeed(sls_readout_speed);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_readout_speed
+}
+//--------------------------------------------------------
+/**
+ *	Read attribute receiver_status related method
+ *
+ *
+ *	Data type:	Tango::DevEnum (receiver_statusEnum)
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void SlsDetectorControl::read_receiver_status(Tango::Attribute &attr)
+{
+	DEBUG_STREAM << "SlsDetectorControl::read_receiver_status(Tango::Attribute &attr) entering... " << std::endl;
+	Tango::DevEnum	*att_value = get_receiver_status_data_ptr(attr.get_name());
+	/*----- PROTECTED REGION ID(SlsDetectorControl::read_receiver_status) ENABLED START -----*/
+    /* clang-format on */
+    auto receiver_status = detector_ptr->getReceiverStatus().front();
+    *att_value = recStatusAdapter_ptr->toTangoEnum(receiver_status);
+    attr.set_value(att_value);
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_receiver_status
 }
 //--------------------------------------------------------
 /**
@@ -1719,11 +1761,13 @@ void SlsDetectorControl::add_dynamic_attributes()
 	//	add_adc_phase_dynamic_attribute("Myadc_phaseAttribute");
 	//	add_delay_after_trigger_dynamic_attribute("Mydelay_after_triggerAttribute");
 	//	add_detector_setting_dynamic_attribute("Mydetector_settingAttribute");
+	//	add_detector_status_dynamic_attribute("Mydetector_statusAttribute");
 	//	add_file_format_dynamic_attribute("Myfile_formatAttribute");
 	//	add_num_frames_left_dynamic_attribute("Mynum_frames_leftAttribute");
 	//	add_num_triggers_left_dynamic_attribute("Mynum_triggers_leftAttribute");
 	//	add_power_chip_dynamic_attribute("Mypower_chipAttribute");
 	//	add_readout_speed_dynamic_attribute("Myreadout_speedAttribute");
+	//	add_receiver_status_dynamic_attribute("Myreceiver_statusAttribute");
 	//	add_temperature_10ge_dynamic_attribute("Mytemperature_10geAttribute");
 	//	add_temperature_adc_dynamic_attribute("Mytemperature_adcAttribute");
 	//	add_temperature_dcdc_dynamic_attribute("Mytemperature_dcdcAttribute");
@@ -1909,6 +1953,64 @@ void SlsDetectorControl::check_stop_in_background_acquisition()
         det_status = detector_ptr->getDetectorStatus().front();
     }
     stop_acquire();
+}
+
+void SlsDetectorControl::add_detector_status_dynamic_attribute(
+    std::string attname, std::unique_ptr<SlsTangoEnumAdapter<runStatus>> &slsEnumAdapter_ptr)
+{
+    //	Attribute : detector_status
+    detector_statusAttrib *detector_status = new detector_statusAttrib(attname);
+    Tango::UserDefaultAttrProp detector_status_prop;
+    //	description	not set for detector_status
+    //	label	not set for detector_status
+    //	unit	not set for detector_status
+    //	standard_unit	not set for detector_status
+    //	display_unit	not set for detector_status
+    //	format	not set for detector_status
+    //	max_value	not set for detector_status
+    //	min_value	not set for detector_status
+    //	max_alarm	not set for detector_status
+    //	min_alarm	not set for detector_status
+    //	max_warning	not set for detector_status
+    //	min_warning	not set for detector_status
+    //	delta_t	not set for detector_status
+    //	delta_val	not set for detector_status
+    detector_status_prop.set_enum_labels(slsEnumAdapter_ptr->slsEnumLabels);
+    detector_status->set_default_properties(detector_status_prop);
+    //	Not Polled
+    detector_status->set_disp_level(Tango::EXPERT);
+    //	Not Memorized
+    detector_status_data.insert(make_pair(attname, 0));
+    add_attribute(detector_status);
+}
+
+void SlsDetectorControl::add_receiver_status_dynamic_attribute(
+    std::string attname, std::unique_ptr<SlsTangoEnumAdapter<runStatus>> &slsEnumAdapter_ptr)
+{
+    //	Attribute : receiver_status
+    receiver_statusAttrib *receiver_status = new receiver_statusAttrib(attname);
+    Tango::UserDefaultAttrProp receiver_status_prop;
+    //	description	not set for receiver_status
+    //	label	not set for receiver_status
+    //	unit	not set for receiver_status
+    //	standard_unit	not set for receiver_status
+    //	display_unit	not set for receiver_status
+    //	format	not set for receiver_status
+    //	max_value	not set for receiver_status
+    //	min_value	not set for receiver_status
+    //	max_alarm	not set for receiver_status
+    //	min_alarm	not set for receiver_status
+    //	max_warning	not set for receiver_status
+    //	min_warning	not set for receiver_status
+    //	delta_t	not set for receiver_status
+    //	delta_val	not set for receiver_status
+    receiver_status_prop.set_enum_labels(slsEnumAdapter_ptr->slsEnumLabels);
+    receiver_status->set_default_properties(receiver_status_prop);
+    //	Not Polled
+    receiver_status->set_disp_level(Tango::EXPERT);
+    //	Not Memorized
+    receiver_status_data.insert(make_pair(attname, 0));
+    add_attribute(receiver_status);
 }
 
 void SlsDetectorControl::add_readout_speed_dynamic_attribute(
@@ -2126,6 +2228,42 @@ void SlsDetectorControl::add_file_format_dynamic_attribute(
 // 	*attr_full_file_name_read = Tango::string_dup(full_string);
 // 	attr.set_value(attr_full_file_name_read);
 //     /* clang-format off */
+// }
+
+// //--------------------------------------------------------
+// /**
+//  *	Read attribute detector_status related method
+//  *
+//  *
+//  *	Data type:	Tango::DevEnum (detector_statusEnum)
+//  *	Attr type:	Scalar
+//  */
+// //--------------------------------------------------------
+// void SlsDetectorControl::read_detector_status(Tango::Attribute &attr)
+// {
+// 	DEBUG_STREAM << "SlsDetectorControl::read_detector_status(Tango::Attribute &attr) entering... " << std::endl;
+// 	/* clang-format on */
+// 	//	Set the attribute value
+// 	attr.set_value(attr_detector_status_read);
+// 	/* clang-format off */
+// }
+
+// //--------------------------------------------------------
+// /**
+//  *	Read attribute receiver_status related method
+//  *
+//  *
+//  *	Data type:	Tango::DevEnum (receiver_statusEnum)
+//  *	Attr type:	Scalar
+//  */
+// //--------------------------------------------------------
+// void SlsDetectorControl::read_receiver_status(Tango::Attribute &attr)
+// {
+// 	DEBUG_STREAM << "SlsDetectorControl::read_receiver_status(Tango::Attribute &attr) entering... " << std::endl;
+// 	/* clang-format on */
+// 	//	Set the attribute value
+// 	attr.set_value(attr_receiver_status_read);
+// 	/* clang-format off */
 // }
 
 

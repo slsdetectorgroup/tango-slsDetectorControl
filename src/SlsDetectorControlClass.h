@@ -399,6 +399,21 @@ public:
 	virtual std::string get_enum_type() {return std::string("detector_settingEnum");}
 };
 
+//	Attribute detector_status class definition
+class detector_statusAttrib: public Tango::Attr
+{
+public:
+	detector_statusAttrib(const std::string &att_name):Attr(att_name.c_str(),
+			Tango::DEV_ENUM, Tango::READ) {};
+	~detector_statusAttrib() {};
+	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
+		{(static_cast<SlsDetectorControl *>(dev))->read_detector_status(att);}
+	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
+		{return (static_cast<SlsDetectorControl *>(dev))->is_detector_status_allowed(ty);}
+	virtual bool same_type(const std::type_info &in_type) {return typeid(detector_statusEnum) == in_type;}
+	virtual std::string get_enum_type() {return std::string("detector_statusEnum");}
+};
+
 //	Attribute file_format class definition
 class file_formatAttrib: public Tango::Attr
 {
@@ -472,6 +487,21 @@ public:
 		{return (static_cast<SlsDetectorControl *>(dev))->is_readout_speed_allowed(ty);}
 	virtual bool same_type(const std::type_info &in_type) {return typeid(readout_speedEnum) == in_type;}
 	virtual std::string get_enum_type() {return std::string("readout_speedEnum");}
+};
+
+//	Attribute receiver_status class definition
+class receiver_statusAttrib: public Tango::Attr
+{
+public:
+	receiver_statusAttrib(const std::string &att_name):Attr(att_name.c_str(),
+			Tango::DEV_ENUM, Tango::READ) {};
+	~receiver_statusAttrib() {};
+	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
+		{(static_cast<SlsDetectorControl *>(dev))->read_receiver_status(att);}
+	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
+		{return (static_cast<SlsDetectorControl *>(dev))->is_receiver_status_allowed(ty);}
+	virtual bool same_type(const std::type_info &in_type) {return typeid(receiver_statusEnum) == in_type;}
+	virtual std::string get_enum_type() {return std::string("receiver_statusEnum");}
 };
 
 //	Attribute temperature_10ge class definition

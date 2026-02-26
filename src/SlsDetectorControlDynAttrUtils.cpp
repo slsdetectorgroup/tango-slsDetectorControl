@@ -34,11 +34,13 @@
 //  adc_phase            |  Tango::DevLong	Scalar
 //  delay_after_trigger  |  Tango::DevDouble	Scalar
 //  detector_setting     |  Tango::DevEnum	Scalar
+//  detector_status      |  Tango::DevEnum	Scalar
 //  file_format          |  Tango::DevEnum	Scalar
 //  num_frames_left      |  Tango::DevLong64	Scalar
 //  num_triggers_left    |  Tango::DevLong	Scalar
 //  power_chip           |  Tango::DevBoolean	Scalar
 //  readout_speed        |  Tango::DevEnum	Scalar
+//  receiver_status      |  Tango::DevEnum	Scalar
 //  temperature_10ge     |  Tango::DevLong	Scalar
 //  temperature_adc      |  Tango::DevLong	Scalar
 //  temperature_dcdc     |  Tango::DevLong	Scalar
@@ -245,6 +247,65 @@ void SlsDetectorControl::remove_detector_setting_dynamic_attribute(std::string a
         /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_detector_setting_dynamic_attribute
 		detector_setting_data.erase(ite);
+	}
+}
+//--------------------------------------------------------
+/**
+ *	Add a detector_status dynamic attribute.
+ *
+ *  parameter attname: attribute name to be created and added.
+ */
+//--------------------------------------------------------
+void SlsDetectorControl::add_detector_status_dynamic_attribute(std::string attname)
+{
+	//	Attribute : detector_status
+	detector_statusAttrib	*detector_status = new detector_statusAttrib(attname);
+	Tango::UserDefaultAttrProp	detector_status_prop;
+	//	description	not set for detector_status
+	//	label	not set for detector_status
+	//	unit	not set for detector_status
+	//	standard_unit	not set for detector_status
+	//	display_unit	not set for detector_status
+	//	format	not set for detector_status
+	//	max_value	not set for detector_status
+	//	min_value	not set for detector_status
+	//	max_alarm	not set for detector_status
+	//	min_alarm	not set for detector_status
+	//	max_warning	not set for detector_status
+	//	min_warning	not set for detector_status
+	//	delta_t	not set for detector_status
+	//	delta_val	not set for detector_status
+	/*----- PROTECTED REGION ID(SlsDetectorControl::att_detector_status_dynamic_attribute) ENABLED START -----*/
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_detector_status_dynamic_attribute
+	detector_status->set_default_properties(detector_status_prop);
+	//	Not Polled
+	detector_status->set_disp_level(Tango::EXPERT);
+	//	Not Memorized
+	detector_status_data.insert(make_pair(attname, 0));
+	add_attribute(detector_status);
+}
+//--------------------------------------------------------
+/**
+ *	remove a detector_status dynamic attribute.
+ *
+ *  parameter attname: attribute name to be removed.
+ */
+//--------------------------------------------------------
+void SlsDetectorControl::remove_detector_status_dynamic_attribute(std::string attname)
+{
+	remove_attribute(attname, true, Tango::Util::instance()->_UseDb);
+	map<std::string,Tango::DevEnum>::iterator ite;
+	if ((ite=detector_status_data.find(attname))!=detector_status_data.end())
+	{
+		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_detector_status_dynamic_attribute) ENABLED START -----*/
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
+		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_detector_status_dynamic_attribute
+		detector_status_data.erase(ite);
 	}
 }
 //--------------------------------------------------------
@@ -540,6 +601,65 @@ void SlsDetectorControl::remove_readout_speed_dynamic_attribute(std::string attn
         /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_readout_speed_dynamic_attribute
 		readout_speed_data.erase(ite);
+	}
+}
+//--------------------------------------------------------
+/**
+ *	Add a receiver_status dynamic attribute.
+ *
+ *  parameter attname: attribute name to be created and added.
+ */
+//--------------------------------------------------------
+void SlsDetectorControl::add_receiver_status_dynamic_attribute(std::string attname)
+{
+	//	Attribute : receiver_status
+	receiver_statusAttrib	*receiver_status = new receiver_statusAttrib(attname);
+	Tango::UserDefaultAttrProp	receiver_status_prop;
+	//	description	not set for receiver_status
+	//	label	not set for receiver_status
+	//	unit	not set for receiver_status
+	//	standard_unit	not set for receiver_status
+	//	display_unit	not set for receiver_status
+	//	format	not set for receiver_status
+	//	max_value	not set for receiver_status
+	//	min_value	not set for receiver_status
+	//	max_alarm	not set for receiver_status
+	//	min_alarm	not set for receiver_status
+	//	max_warning	not set for receiver_status
+	//	min_warning	not set for receiver_status
+	//	delta_t	not set for receiver_status
+	//	delta_val	not set for receiver_status
+	/*----- PROTECTED REGION ID(SlsDetectorControl::att_receiver_status_dynamic_attribute) ENABLED START -----*/
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_receiver_status_dynamic_attribute
+	receiver_status->set_default_properties(receiver_status_prop);
+	//	Not Polled
+	receiver_status->set_disp_level(Tango::EXPERT);
+	//	Not Memorized
+	receiver_status_data.insert(make_pair(attname, 0));
+	add_attribute(receiver_status);
+}
+//--------------------------------------------------------
+/**
+ *	remove a receiver_status dynamic attribute.
+ *
+ *  parameter attname: attribute name to be removed.
+ */
+//--------------------------------------------------------
+void SlsDetectorControl::remove_receiver_status_dynamic_attribute(std::string attname)
+{
+	remove_attribute(attname, true, Tango::Util::instance()->_UseDb);
+	map<std::string,Tango::DevEnum>::iterator ite;
+	if ((ite=receiver_status_data.find(attname))!=receiver_status_data.end())
+	{
+		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_receiver_status_dynamic_attribute) ENABLED START -----*/
+        /* clang-format on */
+        //	Add your own code
+        /* clang-format off */
+		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_receiver_status_dynamic_attribute
+		receiver_status_data.erase(ite);
 	}
 }
 //--------------------------------------------------------
@@ -1268,6 +1388,27 @@ Tango::DevEnum *SlsDetectorControl::get_detector_setting_data_ptr(std::string &n
 }
 //--------------------------------------------------------
 /**
+ *	Return a pointer on detector_status data.
+ *
+ *  parameter attname: the specified attribute name.
+ */
+//--------------------------------------------------------
+Tango::DevEnum *SlsDetectorControl::get_detector_status_data_ptr(std::string &name)
+{
+	map<std::string,Tango::DevEnum>::iterator ite;
+	if ((ite=detector_status_data.find(name))==detector_status_data.end())
+	{
+		TangoSys_OMemStream	tms;
+		tms << "Dynamic attribute " << name << " has not been created";
+		Tango::Except::throw_exception(
+					(const char *)"ATTRIBUTE_NOT_FOUND",
+					tms.str().c_str(),
+					(const char *)"SlsDetectorControl::get_detector_status_data_ptr()");
+	}
+	return  &(ite->second);
+}
+//--------------------------------------------------------
+/**
  *	Return a pointer on file_format data.
  *
  *  parameter attname: the specified attribute name.
@@ -1368,6 +1509,27 @@ Tango::DevEnum *SlsDetectorControl::get_readout_speed_data_ptr(std::string &name
 					(const char *)"ATTRIBUTE_NOT_FOUND",
 					tms.str().c_str(),
 					(const char *)"SlsDetectorControl::get_readout_speed_data_ptr()");
+	}
+	return  &(ite->second);
+}
+//--------------------------------------------------------
+/**
+ *	Return a pointer on receiver_status data.
+ *
+ *  parameter attname: the specified attribute name.
+ */
+//--------------------------------------------------------
+Tango::DevEnum *SlsDetectorControl::get_receiver_status_data_ptr(std::string &name)
+{
+	map<std::string,Tango::DevEnum>::iterator ite;
+	if ((ite=receiver_status_data.find(name))==receiver_status_data.end())
+	{
+		TangoSys_OMemStream	tms;
+		tms << "Dynamic attribute " << name << " has not been created";
+		Tango::Except::throw_exception(
+					(const char *)"ATTRIBUTE_NOT_FOUND",
+					tms.str().c_str(),
+					(const char *)"SlsDetectorControl::get_receiver_status_data_ptr()");
 	}
 	return  &(ite->second);
 }

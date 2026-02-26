@@ -70,6 +70,10 @@ enum class _detector_settingEnum : short {
 } ;
 typedef _detector_settingEnum detector_settingEnum;
 
+enum class _detector_statusEnum : short {
+} ;
+typedef _detector_statusEnum detector_statusEnum;
+
 enum class _file_formatEnum : short {
 } ;
 typedef _file_formatEnum file_formatEnum;
@@ -77,6 +81,10 @@ typedef _file_formatEnum file_formatEnum;
 enum class _readout_speedEnum : short {
 } ;
 typedef _readout_speedEnum readout_speedEnum;
+
+enum class _receiver_statusEnum : short {
+} ;
+typedef _receiver_statusEnum receiver_statusEnum;
 
 enum class _timing_modeEnum : short {
 } ;
@@ -156,6 +164,32 @@ class SlsDetectorControl : public TANGO_BASE_CLASS
               return true;
           },
           [this](std::string name) { this->add_delay_after_trigger_dynamic_attribute(name); }}},
+        {"detector_status",
+         {true,
+          [this]()
+          {
+              auto status = this->detector_ptr->getDetectorStatus();
+              this->detStatusAdapter_ptr =
+                  std::make_unique<SlsTangoEnumAdapter<runStatus>>(std::initializer_list{runStatus::IDLE,
+                                                                                         runStatus::ERROR,
+                                                                                         runStatus::WAITING,
+                                                                                         runStatus::RUN_FINISHED,
+                                                                                         runStatus::TRANSMITTING,
+                                                                                         runStatus::RUNNING,
+                                                                                         runStatus::STOPPED});
+              return true;
+          },
+          [this](std::string name) { this->add_detector_status_dynamic_attribute(name, this->detStatusAdapter_ptr); }}},
+        {"receiver_status",
+         {true,
+          [this]()
+          {
+              auto status = this->detector_ptr->getReceiverStatus();
+              this->recStatusAdapter_ptr = std::make_unique<SlsTangoEnumAdapter<runStatus>>(
+                  std::initializer_list{runStatus::IDLE, runStatus::TRANSMITTING, runStatus::RUNNING});
+              return true;
+          },
+          [this](std::string name) { this->add_receiver_status_dynamic_attribute(name, this->recStatusAdapter_ptr); }}},
         {"file_format",
          {true,
           [this]()
@@ -303,6 +337,8 @@ class SlsDetectorControl : public TANGO_BASE_CLASS
     std::unique_ptr<SlsTangoEnumAdapter<detectorSettings>> detectorSettingsAdapter_ptr;
     std::unique_ptr<SlsTangoEnumAdapter<timingMode>> timingModeAdapter_ptr;
     std::unique_ptr<SlsTangoEnumAdapter<fileFormat>> fileFormatAdapter_ptr;
+    std::unique_ptr<SlsTangoEnumAdapter<runStatus>> detStatusAdapter_ptr;
+    std::unique_ptr<SlsTangoEnumAdapter<runStatus>> recStatusAdapter_ptr;
     /* clang-format off */
 /*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::Data Members
 
@@ -667,6 +703,20 @@ public:
 	map<std::string,Tango::DevEnum>	   detector_setting_data;
 
 	/**
+	 *	Attribute detector_status related methods
+	 *
+	 *
+	 *	Data type:  Tango::DevEnum
+	 *	Attr type:	Scalar
+	 */
+	virtual void read_detector_status(Tango::Attribute &attr);
+	virtual bool is_detector_status_allowed(Tango::AttReqType type);
+	void add_detector_status_dynamic_attribute(std::string attname);
+	void remove_detector_status_dynamic_attribute(std::string attname);
+	Tango::DevEnum *get_detector_status_data_ptr(std::string &name);
+	map<std::string,Tango::DevEnum>	   detector_status_data;
+
+	/**
 	 *	Attribute file_format related methods
 	 *
 	 *
@@ -738,6 +788,20 @@ public:
 	void remove_readout_speed_dynamic_attribute(std::string attname);
 	Tango::DevEnum *get_readout_speed_data_ptr(std::string &name);
 	map<std::string,Tango::DevEnum>	   readout_speed_data;
+
+	/**
+	 *	Attribute receiver_status related methods
+	 *
+	 *
+	 *	Data type:  Tango::DevEnum
+	 *	Attr type:	Scalar
+	 */
+	virtual void read_receiver_status(Tango::Attribute &attr);
+	virtual bool is_receiver_status_allowed(Tango::AttReqType type);
+	void add_receiver_status_dynamic_attribute(std::string attname);
+	void remove_receiver_status_dynamic_attribute(std::string attname);
+	Tango::DevEnum *get_receiver_status_data_ptr(std::string &name);
+	map<std::string,Tango::DevEnum>	   receiver_status_data;
 
 	/**
 	 *	Attribute temperature_10ge related methods
@@ -976,6 +1040,10 @@ public:
 /*----- PROTECTED REGION ID(SlsDetectorControl::Additional Method prototypes) ENABLED START -----*/
     /* clang-format on */
     void check_stop_in_background_acquisition();
+    void add_detector_status_dynamic_attribute(std::string attname,
+                                               std::unique_ptr<SlsTangoEnumAdapter<runStatus>> &slsEnumAdapter_ptr);
+    void add_receiver_status_dynamic_attribute(std::string attname,
+                                               std::unique_ptr<SlsTangoEnumAdapter<runStatus>> &slsEnumAdapter_ptr);
     void add_readout_speed_dynamic_attribute(std::string attname,
                                              std::unique_ptr<SlsTangoEnumAdapter<speedLevel>> &slsEnumAdapter_ptr);
     void add_detector_setting_dynamic_attribute(
