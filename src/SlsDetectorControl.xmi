@@ -30,8 +30,8 @@
         <type xsi:type="pogoDsl:VoidType"/>
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <excludedStates>OFF</excludedStates>
       <excludedStates>FAULT</excludedStates>
+      <excludedStates>OFF</excludedStates>
     </commands>
     <commands name="start_detector" description="" execMethod="start_detector" displayLevel="EXPERT" polledPeriod="0" isDynamic="false">
       <argin description="">
@@ -41,8 +41,8 @@
         <type xsi:type="pogoDsl:VoidType"/>
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <excludedStates>OFF</excludedStates>
       <excludedStates>FAULT</excludedStates>
+      <excludedStates>OFF</excludedStates>
     </commands>
     <commands name="start_receiver" description="" execMethod="start_receiver" displayLevel="EXPERT" polledPeriod="0" isDynamic="false">
       <argin description="">
@@ -52,8 +52,8 @@
         <type xsi:type="pogoDsl:VoidType"/>
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <excludedStates>OFF</excludedStates>
       <excludedStates>FAULT</excludedStates>
+      <excludedStates>OFF</excludedStates>
     </commands>
     <commands name="stop_acquire" description="" execMethod="stop_acquire" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
@@ -63,8 +63,8 @@
         <type xsi:type="pogoDsl:VoidType"/>
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <excludedStates>OFF</excludedStates>
       <excludedStates>FAULT</excludedStates>
+      <excludedStates>OFF</excludedStates>
     </commands>
     <commands name="stop_detector" description="" execMethod="stop_detector" displayLevel="EXPERT" polledPeriod="0" isDynamic="false">
       <argin description="">
@@ -74,8 +74,8 @@
         <type xsi:type="pogoDsl:VoidType"/>
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <excludedStates>OFF</excludedStates>
       <excludedStates>FAULT</excludedStates>
+      <excludedStates>OFF</excludedStates>
     </commands>
     <commands name="stop_receiver" description="" execMethod="stop_receiver" displayLevel="EXPERT" polledPeriod="0" isDynamic="false">
       <argin description="">
@@ -85,8 +85,8 @@
         <type xsi:type="pogoDsl:VoidType"/>
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <excludedStates>OFF</excludedStates>
       <excludedStates>FAULT</excludedStates>
+      <excludedStates>OFF</excludedStates>
     </commands>
     <commands name="Status" description="This command gets the device status (stored in its device_status data member) and returns it to the caller." execMethod="dev_status" displayLevel="OPERATOR" polledPeriod="0">
       <argin description="none">
@@ -114,9 +114,10 @@
         <type xsi:type="pogoDsl:VoidType"/>
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <excludedStates>OFF</excludedStates>
-      <excludedStates>MOVING</excludedStates>
       <excludedStates>FAULT</excludedStates>
+      <excludedStates>MOVING</excludedStates>
+      <excludedStates>OFF</excludedStates>
+      <excludedStates>RUNNING</excludedStates>
     </dynamicCommands>
     <attributes name="acquisition_index" attType="Scalar" rwType="READ_WRITE" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:LongType"/>
@@ -527,6 +528,9 @@
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </states>
     <states name="ON" description="">
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </states>
+    <states name="RUNNING" description="">
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </states>
     <states name="STANDBY" description="">

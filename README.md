@@ -1,4 +1,4 @@
-## slsDetectorTango
+## tango-slsDetectorControl
 
 
 

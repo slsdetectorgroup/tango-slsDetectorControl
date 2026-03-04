@@ -33,6 +33,7 @@
 //  MOVING   |  
 //  OFF      |  
 //  ON       |  
+//  RUNNING  |  
 //  STANDBY  |  
 
 
@@ -1475,8 +1476,8 @@ bool SlsDetectorControl::is_threshold_energy_allowed(TANGO_UNUSED(Tango::AttReqT
 bool SlsDetectorControl::is_start_acquire_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
 	//	Compare device state with not allowed states.
-	if (get_state()==Tango::OFF ||
-		get_state()==Tango::FAULT)
+	if (get_state()==Tango::FAULT ||
+		get_state()==Tango::OFF)
 	{
 	/*----- PROTECTED REGION ID(SlsDetectorControl::start_acquireStateAllowed) ENABLED START -----*/
         /* clang-format on */
@@ -1496,8 +1497,8 @@ bool SlsDetectorControl::is_start_acquire_allowed(TANGO_UNUSED(const CORBA::Any 
 bool SlsDetectorControl::is_start_detector_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
 	//	Compare device state with not allowed states.
-	if (get_state()==Tango::OFF ||
-		get_state()==Tango::FAULT)
+	if (get_state()==Tango::FAULT ||
+		get_state()==Tango::OFF)
 	{
 	/*----- PROTECTED REGION ID(SlsDetectorControl::start_detectorStateAllowed) ENABLED START -----*/
         /* clang-format on */
@@ -1517,8 +1518,8 @@ bool SlsDetectorControl::is_start_detector_allowed(TANGO_UNUSED(const CORBA::Any
 bool SlsDetectorControl::is_start_receiver_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
 	//	Compare device state with not allowed states.
-	if (get_state()==Tango::OFF ||
-		get_state()==Tango::FAULT)
+	if (get_state()==Tango::FAULT ||
+		get_state()==Tango::OFF)
 	{
 	/*----- PROTECTED REGION ID(SlsDetectorControl::start_receiverStateAllowed) ENABLED START -----*/
         /* clang-format on */
@@ -1538,8 +1539,8 @@ bool SlsDetectorControl::is_start_receiver_allowed(TANGO_UNUSED(const CORBA::Any
 bool SlsDetectorControl::is_stop_acquire_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
 	//	Compare device state with not allowed states.
-	if (get_state()==Tango::OFF ||
-		get_state()==Tango::FAULT)
+	if (get_state()==Tango::FAULT ||
+		get_state()==Tango::OFF)
 	{
 	/*----- PROTECTED REGION ID(SlsDetectorControl::stop_acquireStateAllowed) ENABLED START -----*/
         /* clang-format on */
@@ -1559,8 +1560,8 @@ bool SlsDetectorControl::is_stop_acquire_allowed(TANGO_UNUSED(const CORBA::Any &
 bool SlsDetectorControl::is_stop_detector_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
 	//	Compare device state with not allowed states.
-	if (get_state()==Tango::OFF ||
-		get_state()==Tango::FAULT)
+	if (get_state()==Tango::FAULT ||
+		get_state()==Tango::OFF)
 	{
 	/*----- PROTECTED REGION ID(SlsDetectorControl::stop_detectorStateAllowed) ENABLED START -----*/
         /* clang-format on */
@@ -1580,8 +1581,8 @@ bool SlsDetectorControl::is_stop_detector_allowed(TANGO_UNUSED(const CORBA::Any 
 bool SlsDetectorControl::is_stop_receiver_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
 	//	Compare device state with not allowed states.
-	if (get_state()==Tango::OFF ||
-		get_state()==Tango::FAULT)
+	if (get_state()==Tango::FAULT ||
+		get_state()==Tango::OFF)
 	{
 	/*----- PROTECTED REGION ID(SlsDetectorControl::stop_receiverStateAllowed) ENABLED START -----*/
         /* clang-format on */
@@ -1601,9 +1602,10 @@ bool SlsDetectorControl::is_stop_receiver_allowed(TANGO_UNUSED(const CORBA::Any 
 bool SlsDetectorControl::is_load_trimbits_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
 	//	Compare device state with not allowed states.
-	if (get_state()==Tango::OFF ||
+	if (get_state()==Tango::FAULT ||
 		get_state()==Tango::MOVING ||
-		get_state()==Tango::FAULT)
+		get_state()==Tango::OFF ||
+		get_state()==Tango::RUNNING)
 	{
 	/*----- PROTECTED REGION ID(SlsDetectorControl::load_trimbitsStateAllowed) ENABLED START -----*/
         /* clang-format on */

@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.14)
 project(TangoSlsDetectorControl LANGUAGES CXX)
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Tango REQUIRED)
-
 find_package(slsDetectorPackage REQUIRED)
 
 if (slsDetectorPackage_VERSION_MAJOR LESS 8)
@@ -14,7 +16,4 @@ else()
     add_definitions(-DSLS_MAJOR_VERSION=${slsDetectorPackage_VERSION_MAJOR})
 endif()
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 add_subdirectory(src)
-
-set(CMAKE_CXX_STANDARD 17)

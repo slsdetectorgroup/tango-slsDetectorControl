@@ -1812,7 +1812,7 @@ void SlsDetectorControl::start_acquire()
     // check it's very probable that detector will be still in ON mode (even not
     // started to acquire.)
     std::this_thread::sleep_for(0.1s);
-    set_state(Tango::MOVING);
+    set_state(Tango::RUNNING);
     std::thread(&SlsDetectorControl::check_stop_in_background_acquisition, this).detach();
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::start_acquire
@@ -1866,6 +1866,18 @@ void SlsDetectorControl::stop_acquire()
     detector_ptr->stopDetector();
     detector_ptr->stopReceiver();
     detector_ptr->clearAcquiringFlag();
+    /* A detector might take a while after stopDetector() execution to change its state
+     * back to IDLE. Moreover, we need to update the counter of acquisition index.
+     * To allow user to differentiate between the acquisition process and the time we
+     * updating the acquisition index, we set the state to MOVING during this time.
+     */
+    set_state(Tango::MOVING);
+    std::this_thread::sleep_for(0.1s);
+    if(detector_ptr->getFileWrite().front())
+    {
+        auto acquisitionIndex = detector_ptr->getAcquisitionIndex().front();
+        detector_ptr->setAcquisitionIndex(acquisitionIndex + 1);
+    }
     set_state(Tango::ON);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::stop_acquire
