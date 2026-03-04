@@ -27,6 +27,8 @@
 #include <tango/tango.h>
 using std::map;
 #include <chrono>
+#include <functional>
+#include <unordered_map>
 #include <string>
 #include <variant>
 #include <vector>
