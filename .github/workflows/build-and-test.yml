@@ -37,7 +37,7 @@ jobs:
       fail-fast: false
       matrix:
         tango-version: [9.5.0, 10.0.0, 10.1.0]
-        sls-version: [8.0.2, 9.0.0, 10.0.0]
+        sls-version: [8.0.2, 9.2.0, 10.0.0]
     container:
       image: ghcr.io/slsdetectorgroup/tango-${{ matrix.tango-version }}-sls-${{ matrix.sls-version }}:latest
     steps:
