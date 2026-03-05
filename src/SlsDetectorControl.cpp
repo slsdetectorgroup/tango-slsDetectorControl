@@ -572,8 +572,10 @@ void SlsDetectorControl::read_file_name(Tango::Attribute &attr)
     int module_index = 0;
     auto file_index = detector_ptr->getAcquisitionIndex().front();
     auto file_format = detector_ptr->getFileFormat().front();
-    std::string full_string = file_name_prefix + "_d" + std::to_string(module_index) + "_f" +
-                              std::to_string(file_index) + "_" + std::to_string(file_format);
+    // Actually, the index after f (subFileIndex) can be more than zero if more frames are acquired than the number of
+    // frames per file but this will be known only during the file writing.
+    std::string full_string =
+        file_name_prefix + "_d" + std::to_string(module_index) + "_f0_" + std::to_string(file_index);
     *attr_file_name_read = Tango::string_dup(full_string);
     attr.set_value(attr_file_name_read);
     /* clang-format off */
