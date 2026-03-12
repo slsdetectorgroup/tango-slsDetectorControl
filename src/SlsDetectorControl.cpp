@@ -1175,7 +1175,9 @@ void SlsDetectorControl::read_delay_after_trigger(Tango::Attribute &attr)
 	Tango::DevDouble	*att_value = get_delay_after_trigger_data_ptr(attr.get_name());
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_delay_after_trigger) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+
+    auto delay_after_trigger = detector_ptr->getDelayAfterTrigger().front();
+    *att_value = std::chrono::duration<double>(delay_after_trigger).count();
     attr.set_value(att_value);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_delay_after_trigger
@@ -1197,7 +1199,8 @@ void SlsDetectorControl::write_delay_after_trigger(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_delay_after_trigger) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    auto delay_after_trigger = std::chrono::round<std::chrono::nanoseconds>(w_val * 1s);
+    detector_ptr->setDelayAfterTrigger(delay_after_trigger);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_delay_after_trigger
 }
@@ -1330,7 +1333,7 @@ void SlsDetectorControl::read_num_frames_left(Tango::Attribute &attr)
 	Tango::DevLong64	*att_value = get_num_frames_left_data_ptr(attr.get_name());
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_num_frames_left) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *att_value = detector_ptr->getNumberOfFramesLeft().front();
     attr.set_value(att_value);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_num_frames_left
@@ -1350,7 +1353,7 @@ void SlsDetectorControl::read_num_triggers_left(Tango::Attribute &attr)
 	Tango::DevLong	*att_value = get_num_triggers_left_data_ptr(attr.get_name());
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_num_triggers_left) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    *att_value = detector_ptr->getNumberOfTriggersLeft().front();
     attr.set_value(att_value);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_num_triggers_left
@@ -1434,7 +1437,6 @@ void SlsDetectorControl::write_readout_speed(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_readout_speed) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
     auto sls_readout_speed = readoutSpeedAdapter_ptr->toSlsEnum(static_cast<Tango::DevEnum>(w_val));
     detector_ptr->setReadoutSpeed(sls_readout_speed);
     /* clang-format off */
@@ -1658,7 +1660,7 @@ void SlsDetectorControl::write_tengiga(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_tengiga) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    detector_ptr->setTenGiga(w_val);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_tengiga
 }
