@@ -338,7 +338,7 @@ class num_missing_packetsAttrib: public Tango::SpectrumAttr
 {
 public:
 	// Constants for num_missing_packets attribute
-	constexpr static long X_DATA_SIZE = 100;
+	constexpr static long X_DATA_SIZE = 2;
 	num_missing_packetsAttrib():SpectrumAttr("num_missing_packets",
 			Tango::DEV_LONG64, Tango::READ, num_missing_packetsAttrib::X_DATA_SIZE) {};
 	~num_missing_packetsAttrib() {};

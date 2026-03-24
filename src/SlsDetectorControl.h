@@ -328,6 +328,15 @@ class SlsDetectorControl : public TANGO_BASE_CLASS
           },
           [this](std::string name)
           { this->add_detector_setting_dynamic_attribute(name, this->detectorSettingsAdapter_ptr); }}}};
+    map<std::string, attribute_info> commandsInfo = {
+        {"load_trimbits",
+         {true,
+          [this]()
+          {
+              auto detector_type = this->detector_ptr->getDetectorType().front();
+              return (detector_type == detectorType::EIGER) || (detector_type == detectorType::MYTHEN3);
+          },
+          [this](std::string name) { this->add_load_trimbits_dynamic_command(name, true); }}}};
     /*
      * Also the list of available values for the same attribute is detector
      * dependent. Thus, this should be determined at runtime as well. Moreover,
@@ -651,7 +660,7 @@ public:
  *
  *
  *	Data type:  Tango::DevLong64
- *	Attr type:	Spectrum max = 100
+ *	Attr type:	Spectrum max = 2
  */
 	virtual void read_num_missing_packets(Tango::Attribute &attr);
 	virtual bool is_num_missing_packets_allowed(Tango::AttReqType type);

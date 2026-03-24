@@ -74,7 +74,7 @@
 //  period               |  Tango::DevDouble	Scalar
 //  rx_zmq_data_stream   |  Tango::DevBoolean	Scalar
 //  temperature_fpga     |  Tango::DevLong	Scalar
-//  num_missing_packets  |  Tango::DevLong64	Spectrum  ( max = 100)
+//  num_missing_packets  |  Tango::DevLong64	Spectrum  ( max = 2)
 //================================================================
 
 namespace SlsDetectorControl_ns
@@ -161,6 +161,7 @@ void SlsDetectorControl::delete_device()
 	delete[] attr_period_read;
 	delete[] attr_rx_zmq_data_stream_read;
 	delete[] attr_temperature_fpga_read;
+	delete[] attr_num_missing_packets_read;
 }
 
 //--------------------------------------------------------
@@ -201,6 +202,7 @@ void SlsDetectorControl::init_device()
 	attr_period_read = new Tango::DevDouble[1];
 	attr_rx_zmq_data_stream_read = new Tango::DevBoolean[1];
 	attr_temperature_fpga_read = new Tango::DevLong[1];
+	attr_num_missing_packets_read = new Tango::DevLong64[2];
 	//	No longer if mandatory property not set.
 	if (mandatoryNotDefined)
 		return;
@@ -227,6 +229,18 @@ void SlsDetectorControl::init_device()
         catch(sls::RuntimeError &e)
         {
             TANGO_LOG_DEBUG << "Error initializing attribute " << k << ": " << e.what() << std::endl;
+            v.available = false;
+        }
+    }
+    for(auto &[k, v] : commandsInfo)
+    {
+        try
+        {
+            v.available = v.checkFunction();
+        }
+        catch(sls::RuntimeError &e)
+        {
+            TANGO_LOG_DEBUG << "Error initializing command " << k << ": " << e.what() << std::endl;
             v.available = false;
         }
     }
@@ -1105,7 +1119,7 @@ void SlsDetectorControl::read_temperature_fpga(Tango::Attribute &attr)
  *
  *
  *	Data type:	Tango::DevLong64
- *	Attr type:	Spectrum max = 100
+ *	Attr type:	Spectrum max = 2
  */
 //--------------------------------------------------------
 void SlsDetectorControl::read_num_missing_packets(Tango::Attribute &attr)
@@ -1113,8 +1127,13 @@ void SlsDetectorControl::read_num_missing_packets(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_num_missing_packets(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_num_missing_packets) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
-    attr.set_value(attr_num_missing_packets_read, num_missing_packetsAttrib::X_DATA_SIZE);
+    auto num_missing_packets = detector_ptr->getNumMissingPackets().front();
+    auto array_size = std::min(num_missing_packets.size(), static_cast<size_t>(num_missing_packetsAttrib::X_DATA_SIZE));
+    for(auto i = 0; i < array_size; ++i)
+    {
+        attr_num_missing_packets_read[i] = num_missing_packets[i];
+    }
+    attr.set_value(attr_num_missing_packets_read, array_size);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_num_missing_packets
 }
@@ -1175,7 +1194,6 @@ void SlsDetectorControl::read_delay_after_trigger(Tango::Attribute &attr)
 	Tango::DevDouble	*att_value = get_delay_after_trigger_data_ptr(attr.get_name());
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_delay_after_trigger) ENABLED START -----*/
     /* clang-format on */
-
     auto delay_after_trigger = detector_ptr->getDelayAfterTrigger().front();
     *att_value = std::chrono::duration<double>(delay_after_trigger).count();
     attr.set_value(att_value);
@@ -1638,7 +1656,8 @@ void SlsDetectorControl::read_tengiga(Tango::Attribute &attr)
 	Tango::DevBoolean	*att_value = get_tengiga_data_ptr(attr.get_name());
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_tengiga) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
+    auto tengiga = detector_ptr->getTenGiga().front();
+    *att_value = tengiga;
     attr.set_value(att_value);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_tengiga
@@ -1722,8 +1741,13 @@ void SlsDetectorControl::read_threshold_energy(Tango::Attribute &attr)
 	Tango::DevLong	*att_value = get_threshold_energy_data_ptr(attr.get_name());
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_threshold_energy) ENABLED START -----*/
     /* clang-format on */
-    //	Set the attribute value
-    attr.set_value(att_value, threshold_energyAttrib::X_DATA_SIZE);
+    auto threshold_energy = detector_ptr->getAllThresholdEnergy().front();
+    auto array_size = std::min(threshold_energy.size(), static_cast<size_t>(threshold_energyAttrib::X_DATA_SIZE));
+    for(size_t i = 0; i < array_size; ++i)
+    {
+        att_value[i] = threshold_energy[i];
+    }
+    attr.set_value(att_value, array_size);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_threshold_energy
 }
@@ -1747,7 +1771,9 @@ void SlsDetectorControl::write_threshold_energy(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(SlsDetectorControl::write_threshold_energy) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code
+    std::array<int, threshold_energyAttrib::X_DATA_SIZE> threshold_energy_array;
+    std::copy(w_val, w_val + threshold_energyAttrib::X_DATA_SIZE, threshold_energy_array.begin());
+    detector_ptr->setThresholdEnergy(threshold_energy_array);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_threshold_energy
 }
@@ -1849,9 +1875,7 @@ void SlsDetectorControl::start_receiver()
 	DEBUG_STREAM << "SlsDetectorControl::start_receiver()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::start_receiver) ENABLED START -----*/
     /* clang-format on */
-
-    //	Add your own code
-
+    detector_ptr->startReceiver();
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::start_receiver
 }
@@ -1931,9 +1955,8 @@ void SlsDetectorControl::load_trimbits(Tango::DevString argin, Tango::Command &c
 	DEBUG_STREAM << "SlsDetectorControl::" << command.get_name() << "  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::load_trimbits) ENABLED START -----*/
     /* clang-format on */
-
-    //	Add your own code
-
+    auto trimbits_file = std::string(argin);
+    detector_ptr->loadTrimbits(trimbits_file);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::load_trimbits
 }
@@ -1952,7 +1975,13 @@ void SlsDetectorControl::add_dynamic_commands()
 
 	/*----- PROTECTED REGION ID(SlsDetectorControl::add_dynamic_commands) ENABLED START -----*/
     /* clang-format on */
-    //	Add your own code to create and add dynamic commands if any
+    for(auto &[k, v] : commandsInfo)
+    {
+        if(v.available)
+        {
+            v.registerFunction(k);
+        }
+    }
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::add_dynamic_commands
 }
