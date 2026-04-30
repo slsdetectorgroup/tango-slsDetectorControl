@@ -22,6 +22,20 @@
       <type xsi:type="pogoDsl:StringVectorType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </deviceProperties>
+    <deviceProperties name="ReceiverPort" description="Port for an slsReceiver to run">
+      <type xsi:type="pogoDsl:UIntType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <DefaultPropValue>1954</DefaultPropValue>
+    </deviceProperties>
+    <deviceProperties name="ReceiverExecutablePath" description="Path to slsReceiver executable to run on startup (if enabled).&#xA;Keep empty to use the embedded slsReceiver.&#xA;Default slsReceiver path is: /usr/local/bin/slsReceiver">
+      <type xsi:type="pogoDsl:StringType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </deviceProperties>
+    <deviceProperties name="StartReceiverOnStartup" description="Enable to run slsReceiver on startup of the TangoDS.">
+      <type xsi:type="pogoDsl:BooleanType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <DefaultPropValue>false</DefaultPropValue>
+    </deviceProperties>
     <commands name="start_acquire" description="" execMethod="start_acquire" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>

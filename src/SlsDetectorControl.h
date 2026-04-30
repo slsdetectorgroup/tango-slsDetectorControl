@@ -38,6 +38,10 @@ using std::map;
 #include <sls/ToString.h>
 #include <sls/sls_detector_defs.h>
 #include <sls/sls_detector_exceptions.h>
+#include <filesystem>
+#include <unistd.h>
+#include <csignal>
+#include <sys/wait.h>
 
 using std::chrono_literals::operator""s;
 using dacIndex = sls::defs::dacIndex;
@@ -142,6 +146,10 @@ class SlsDetectorControl : public TANGO_BASE_CLASS
     /* clang-format on */
   private:
     std::unique_ptr<sls::Detector> detector_ptr;
+#if SLS_DET_EMBED_RECEIVER
+    std::unique_ptr<sls::Receiver> receiver_ptr;
+#endif
+    pid_t receiver_pid;
 
   public:
     /*
@@ -363,6 +371,14 @@ public:
 	std::vector<std::string>	gainMapPaths;
 	//	PixelMaskPaths:	Pixel map files for each module.
 	std::vector<std::string>	pixelMaskPaths;
+	//	ReceiverPort:	Port for an slsReceiver to run
+	Tango::DevULong	receiverPort;
+	//	ReceiverExecutablePath:	Path to slsReceiver executable to run on startup (if enabled).
+	//  Keep empty to use the embedded slsReceiver.
+	//  Default slsReceiver path is: /usr/local/bin/slsReceiver
+	std::string	receiverExecutablePath;
+	//	StartReceiverOnStartup:	Enable to run slsReceiver on startup of the TangoDS.
+	Tango::DevBoolean	startReceiverOnStartup;
 
 	bool	mandatoryNotDefined;
 

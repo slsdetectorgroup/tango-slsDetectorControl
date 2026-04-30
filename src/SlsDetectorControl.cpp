@@ -139,7 +139,13 @@ void SlsDetectorControl::delete_device()
 	DEBUG_STREAM << "SlsDetectorControl::delete_device() " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::delete_device) ENABLED START -----*/
     /* clang-format on */
-    //	Delete device allocated objects
+    // kill slsReceiver if was started as a forked process
+    if(startReceiverOnStartup && receiver_pid > 0)
+    {
+        // SIGTERM is not enough to kill the receiver process
+        kill(receiver_pid, SIGKILL);
+        waitpid(receiver_pid, nullptr, 0);
+    }
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::delete_device
 	delete[] attr_acquisition_index_read;
@@ -209,6 +215,28 @@ void SlsDetectorControl::init_device()
 
 	/*----- PROTECTED REGION ID(SlsDetectorControl::init_device) ENABLED START -----*/
     /* clang-format on */
+    if(startReceiverOnStartup)
+    {
+#ifdef SLS_DET_EMBED_RECEIVER
+        if(receiverExecutablePath.empty())
+        {
+            receiver_ptr = std::make_unique<sls::Receiver>(receiverPort);
+            TANGO_LOG_DEBUG << "Created sls::Receiver with port " << receiverPort << std::endl;
+        }
+#endif
+        if(!receiverExecutablePath.empty())
+        {
+            auto exec_name = std::filesystem::path(receiverExecutablePath).filename().c_str();
+            receiver_pid = fork();
+            if(receiver_pid == 0) // child process
+            {
+                TANGO_LOG_DEBUG << "Created sls::Receiver with executable " << receiverExecutablePath << " and port "
+                                << receiverPort << std::endl;
+                execl(receiverExecutablePath.c_str(), exec_name, "-p", std::to_string(receiverPort).c_str(), nullptr);
+            }
+            std::this_thread::sleep_for(1s); // give the receiver some time to start
+        }
+    }
     detector_ptr = std::make_unique<sls::Detector>(detectorId);
     TANGO_LOG_DEBUG << "Created sls::Detector with id " << detectorId << std::endl;
     try
@@ -272,6 +300,9 @@ void SlsDetectorControl::get_device_property()
 	dev_prop.push_back(Tango::DbDatum("DetectorId"));
 	dev_prop.push_back(Tango::DbDatum("GainMapPaths"));
 	dev_prop.push_back(Tango::DbDatum("PixelMaskPaths"));
+	dev_prop.push_back(Tango::DbDatum("ReceiverPort"));
+	dev_prop.push_back(Tango::DbDatum("ReceiverExecutablePath"));
+	dev_prop.push_back(Tango::DbDatum("StartReceiverOnStartup"));
 
 	//	is there at least one property to be read ?
 	if (dev_prop.size()>0)
@@ -331,6 +362,39 @@ void SlsDetectorControl::get_device_property()
 		}
 		//	And try to extract PixelMaskPaths value from database
 		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  pixelMaskPaths;
+
+		//	Try to initialize ReceiverPort from class property
+		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
+		if (cl_prop.is_empty()==false)	cl_prop  >>  receiverPort;
+		else {
+			//	Try to initialize ReceiverPort from default device value
+			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
+			if (def_prop.is_empty()==false)	def_prop  >>  receiverPort;
+		}
+		//	And try to extract ReceiverPort value from database
+		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  receiverPort;
+
+		//	Try to initialize ReceiverExecutablePath from class property
+		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
+		if (cl_prop.is_empty()==false)	cl_prop  >>  receiverExecutablePath;
+		else {
+			//	Try to initialize ReceiverExecutablePath from default device value
+			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
+			if (def_prop.is_empty()==false)	def_prop  >>  receiverExecutablePath;
+		}
+		//	And try to extract ReceiverExecutablePath value from database
+		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  receiverExecutablePath;
+
+		//	Try to initialize StartReceiverOnStartup from class property
+		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
+		if (cl_prop.is_empty()==false)	cl_prop  >>  startReceiverOnStartup;
+		else {
+			//	Try to initialize StartReceiverOnStartup from default device value
+			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
+			if (def_prop.is_empty()==false)	def_prop  >>  startReceiverOnStartup;
+		}
+		//	And try to extract StartReceiverOnStartup value from database
+		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  startReceiverOnStartup;
 
 	}
 
