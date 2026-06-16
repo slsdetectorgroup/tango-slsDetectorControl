@@ -31,27 +31,28 @@
 //================================================================
 //  Attributes managed are:
 //================================================================
-//  adc_phase            |  Tango::DevLong	Scalar
-//  delay_after_trigger  |  Tango::DevDouble	Scalar
-//  detector_setting     |  Tango::DevEnum	Scalar
-//  detector_status      |  Tango::DevEnum	Scalar
-//  file_format          |  Tango::DevEnum	Scalar
-//  num_frames_left      |  Tango::DevLong64	Scalar
-//  num_triggers_left    |  Tango::DevLong	Scalar
-//  power_chip           |  Tango::DevBoolean	Scalar
-//  readout_speed        |  Tango::DevEnum	Scalar
-//  receiver_status      |  Tango::DevEnum	Scalar
-//  temperature_10ge     |  Tango::DevLong	Scalar
-//  temperature_adc      |  Tango::DevLong	Scalar
-//  temperature_dcdc     |  Tango::DevLong	Scalar
-//  temperature_fpga2    |  Tango::DevLong	Scalar
-//  temperature_fpga3    |  Tango::DevLong	Scalar
-//  temperature_fpgaext  |  Tango::DevLong	Scalar
-//  temperature_sodl     |  Tango::DevLong	Scalar
-//  temperature_sodr     |  Tango::DevLong	Scalar
-//  tengiga              |  Tango::DevBoolean	Scalar
-//  timing_mode          |  Tango::DevEnum	Scalar
-//  threshold_energy     |  Tango::DevLong	Spectrum  ( max = 3)
+//  adc_phase               |  Tango::DevLong	Scalar
+//  delay_after_trigger     |  Tango::DevDouble	Scalar
+//  detector_setting        |  Tango::DevEnum	Scalar
+//  detector_status         |  Tango::DevEnum	Scalar
+//  file_format             |  Tango::DevEnum	Scalar
+//  num_frames_left         |  Tango::DevLong64	Scalar
+//  num_triggers_left       |  Tango::DevLong	Scalar
+//  power_chip              |  Tango::DevBoolean	Scalar
+//  readout_speed           |  Tango::DevEnum	Scalar
+//  receiver_status         |  Tango::DevEnum	Scalar
+//  temperature_10ge        |  Tango::DevLong	Scalar
+//  temperature_adc         |  Tango::DevLong	Scalar
+//  temperature_dcdc        |  Tango::DevLong	Scalar
+//  temperature_fpga2       |  Tango::DevLong	Scalar
+//  temperature_fpga3       |  Tango::DevLong	Scalar
+//  temperature_fpgaext     |  Tango::DevLong	Scalar
+//  temperature_sodl        |  Tango::DevLong	Scalar
+//  temperature_sodr        |  Tango::DevLong	Scalar
+//  tengiga                 |  Tango::DevBoolean	Scalar
+//  timing_mode             |  Tango::DevEnum	Scalar
+//  additional_json_header  |  Tango::DevString	Scalar
+//  threshold_energy        |  Tango::DevLong	Spectrum  ( max = 3)
 //================================================================
 
 //	For compatibility reason, this file (SlsDetectorControlDynAttrUtils)
@@ -85,7 +86,7 @@ void SlsDetectorControl::add_adc_phase_dynamic_attribute(std::string attname)
 	Tango::UserDefaultAttrProp	adc_phase_prop;
 	//	description	not set for adc_phase
 	//	label	not set for adc_phase
-	adc_phase_prop.set_unit("°");
+	adc_phase_prop.set_unit("ï¿½");
 	//	standard_unit	not set for adc_phase
 	//	display_unit	not set for adc_phase
 	//	format	not set for adc_phase
@@ -676,7 +677,7 @@ void SlsDetectorControl::add_temperature_10ge_dynamic_attribute(std::string attn
 	Tango::UserDefaultAttrProp	temperature_10ge_prop;
 	//	description	not set for temperature_10ge
 	//	label	not set for temperature_10ge
-	temperature_10ge_prop.set_unit("°C");
+	temperature_10ge_prop.set_unit("ï¿½C");
 	//	standard_unit	not set for temperature_10ge
 	//	display_unit	not set for temperature_10ge
 	//	format	not set for temperature_10ge
@@ -735,7 +736,7 @@ void SlsDetectorControl::add_temperature_adc_dynamic_attribute(std::string attna
 	Tango::UserDefaultAttrProp	temperature_adc_prop;
 	//	description	not set for temperature_adc
 	//	label	not set for temperature_adc
-	temperature_adc_prop.set_unit("°C");
+	temperature_adc_prop.set_unit("ï¿½C");
 	//	standard_unit	not set for temperature_adc
 	//	display_unit	not set for temperature_adc
 	//	format	not set for temperature_adc
@@ -794,7 +795,7 @@ void SlsDetectorControl::add_temperature_dcdc_dynamic_attribute(std::string attn
 	Tango::UserDefaultAttrProp	temperature_dcdc_prop;
 	//	description	not set for temperature_dcdc
 	//	label	not set for temperature_dcdc
-	temperature_dcdc_prop.set_unit("°C");
+	temperature_dcdc_prop.set_unit("ï¿½C");
 	//	standard_unit	not set for temperature_dcdc
 	//	display_unit	not set for temperature_dcdc
 	//	format	not set for temperature_dcdc
@@ -853,7 +854,7 @@ void SlsDetectorControl::add_temperature_fpga2_dynamic_attribute(std::string att
 	Tango::UserDefaultAttrProp	temperature_fpga2_prop;
 	//	description	not set for temperature_fpga2
 	//	label	not set for temperature_fpga2
-	temperature_fpga2_prop.set_unit("°C");
+	temperature_fpga2_prop.set_unit("ï¿½C");
 	//	standard_unit	not set for temperature_fpga2
 	//	display_unit	not set for temperature_fpga2
 	//	format	not set for temperature_fpga2
@@ -912,7 +913,7 @@ void SlsDetectorControl::add_temperature_fpga3_dynamic_attribute(std::string att
 	Tango::UserDefaultAttrProp	temperature_fpga3_prop;
 	//	description	not set for temperature_fpga3
 	//	label	not set for temperature_fpga3
-	temperature_fpga3_prop.set_unit("°C");
+	temperature_fpga3_prop.set_unit("ï¿½C");
 	//	standard_unit	not set for temperature_fpga3
 	//	display_unit	not set for temperature_fpga3
 	//	format	not set for temperature_fpga3
@@ -971,7 +972,7 @@ void SlsDetectorControl::add_temperature_fpgaext_dynamic_attribute(std::string a
 	Tango::UserDefaultAttrProp	temperature_fpgaext_prop;
 	//	description	not set for temperature_fpgaext
 	//	label	not set for temperature_fpgaext
-	temperature_fpgaext_prop.set_unit("°C");
+	temperature_fpgaext_prop.set_unit("ï¿½C");
 	//	standard_unit	not set for temperature_fpgaext
 	//	display_unit	not set for temperature_fpgaext
 	//	format	not set for temperature_fpgaext
@@ -1030,7 +1031,7 @@ void SlsDetectorControl::add_temperature_sodl_dynamic_attribute(std::string attn
 	Tango::UserDefaultAttrProp	temperature_sodl_prop;
 	//	description	not set for temperature_sodl
 	//	label	not set for temperature_sodl
-	temperature_sodl_prop.set_unit("°C");
+	temperature_sodl_prop.set_unit("ï¿½C");
 	//	standard_unit	not set for temperature_sodl
 	//	display_unit	not set for temperature_sodl
 	//	format	not set for temperature_sodl
@@ -1089,7 +1090,7 @@ void SlsDetectorControl::add_temperature_sodr_dynamic_attribute(std::string attn
 	Tango::UserDefaultAttrProp	temperature_sodr_prop;
 	//	description	not set for temperature_sodr
 	//	label	not set for temperature_sodr
-	temperature_sodr_prop.set_unit("°C");
+	temperature_sodr_prop.set_unit("ï¿½C");
 	//	standard_unit	not set for temperature_sodr
 	//	display_unit	not set for temperature_sodr
 	//	format	not set for temperature_sodr
@@ -1250,6 +1251,67 @@ void SlsDetectorControl::remove_timing_mode_dynamic_attribute(std::string attnam
         /* clang-format off */
 		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_timing_mode_dynamic_attribute
 		timing_mode_data.erase(ite);
+	}
+}
+//--------------------------------------------------------
+/**
+ *	Add a additional_json_header dynamic attribute.
+ *
+ *  parameter attname: attribute name to be created and added.
+ */
+//--------------------------------------------------------
+void SlsDetectorControl::add_additional_json_header_dynamic_attribute(std::string attname)
+{
+	//	Attribute : additional_json_header
+	additional_json_headerAttrib	*additional_json_header = new additional_json_headerAttrib(attname);
+	Tango::UserDefaultAttrProp	additional_json_header_prop;
+	//	description	not set for additional_json_header
+	//	label	not set for additional_json_header
+	//	unit	not set for additional_json_header
+	//	standard_unit	not set for additional_json_header
+	//	display_unit	not set for additional_json_header
+	//	format	not set for additional_json_header
+	//	max_value	not set for additional_json_header
+	//	min_value	not set for additional_json_header
+	//	max_alarm	not set for additional_json_header
+	//	min_alarm	not set for additional_json_header
+	//	max_warning	not set for additional_json_header
+	//	min_warning	not set for additional_json_header
+	//	delta_t	not set for additional_json_header
+	//	delta_val	not set for additional_json_header
+	/*----- PROTECTED REGION ID(SlsDetectorControl::att_additional_json_header_dynamic_attribute) ENABLED START -----*/
+    /* clang-format on */
+    //	Add your own code
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::att_additional_json_header_dynamic_attribute
+	additional_json_header->set_default_properties(additional_json_header_prop);
+	//	Not Polled
+	additional_json_header->set_disp_level(Tango::OPERATOR);
+	//	Not Memorized
+	Tango::DevString *dev_str = new Tango::DevString[1];
+	*dev_str = nullptr;
+	additional_json_header_data.insert(make_pair(attname, *dev_str));
+	add_attribute(additional_json_header);
+}
+//--------------------------------------------------------
+/**
+ *	remove a additional_json_header dynamic attribute.
+ *
+ *  parameter attname: attribute name to be removed.
+ */
+//--------------------------------------------------------
+void SlsDetectorControl::remove_additional_json_header_dynamic_attribute(std::string attname)
+{
+	remove_attribute(attname, true, Tango::Util::instance()->_UseDb);
+	map<std::string,Tango::DevString>::iterator ite;
+	if ((ite=additional_json_header_data.find(attname))!=additional_json_header_data.end())
+	{
+		/*----- PROTECTED REGION ID(SlsDetectorControl::remove_additional_json_header_dynamic_attribute) ENABLED START -----*/
+        /* clang-format on */
+        Tango::string_free(ite->second);
+        /* clang-format off */
+		/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_additional_json_header_dynamic_attribute
+		additional_json_header_data.erase(ite);
 	}
 }
 //--------------------------------------------------------
@@ -1740,6 +1802,27 @@ Tango::DevEnum *SlsDetectorControl::get_timing_mode_data_ptr(std::string &name)
 					(const char *)"ATTRIBUTE_NOT_FOUND",
 					tms.str().c_str(),
 					(const char *)"SlsDetectorControl::get_timing_mode_data_ptr()");
+	}
+	return  &(ite->second);
+}
+//--------------------------------------------------------
+/**
+ *	Return a pointer on additional_json_header data.
+ *
+ *  parameter attname: the specified attribute name.
+ */
+//--------------------------------------------------------
+Tango::DevString *SlsDetectorControl::get_additional_json_header_data_ptr(std::string &name)
+{
+	map<std::string,Tango::DevString>::iterator ite;
+	if ((ite=additional_json_header_data.find(name))==additional_json_header_data.end())
+	{
+		TangoSys_OMemStream	tms;
+		tms << "Dynamic attribute " << name << " has not been created";
+		Tango::Except::throw_exception(
+					(const char *)"ATTRIBUTE_NOT_FOUND",
+					tms.str().c_str(),
+					(const char *)"SlsDetectorControl::get_additional_json_header_data_ptr()");
 	}
 	return  &(ite->second);
 }

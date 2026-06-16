@@ -1423,6 +1423,28 @@ bool SlsDetectorControl::is_timing_mode_allowed(TANGO_UNUSED(Tango::AttReqType t
 
 //--------------------------------------------------------
 /**
+ *	Method      : SlsDetectorControl::is_additional_json_header_allowed()
+ * Description:  Execution allowed for additional_json_header attribute
+ */
+//--------------------------------------------------------
+bool SlsDetectorControl::is_additional_json_header_allowed(TANGO_UNUSED(Tango::AttReqType type))
+{
+	//	Not any excluded states for additional_json_header attribute in Write access.
+	/*----- PROTECTED REGION ID(SlsDetectorControl::additional_json_headerStateAllowed_WRITE) ENABLED START -----*/
+    /* clang-format on */
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::additional_json_headerStateAllowed_WRITE
+
+	//	Not any excluded states for additional_json_header attribute in read access.
+	/*----- PROTECTED REGION ID(SlsDetectorControl::additional_json_headerStateAllowed_READ) ENABLED START -----*/
+    /* clang-format on */
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::additional_json_headerStateAllowed_READ
+	return true;
+}
+
+//--------------------------------------------------------
+/**
  *	Method      : SlsDetectorControl::is_threshold_energy_allowed()
  * Description:  Execution allowed for threshold_energy attribute
  */
@@ -1590,6 +1612,38 @@ bool SlsDetectorControl::is_stop_receiver_allowed(TANGO_UNUSED(const CORBA::Any 
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::stop_receiverStateAllowed
 		return false;
 	}
+	return true;
+}
+
+//--------------------------------------------------------
+/**
+ *	Method      : SlsDetectorControl::is_add_additional_json_parameter_allowed()
+ * Description:  Execution allowed for add_additional_json_parameter attribute
+ */
+//--------------------------------------------------------
+bool SlsDetectorControl::is_add_additional_json_parameter_allowed(TANGO_UNUSED(const CORBA::Any &any))
+{
+	//	Not any excluded states for add_additional_json_parameter command.
+	/*----- PROTECTED REGION ID(SlsDetectorControl::add_additional_json_parameterStateAllowed) ENABLED START -----*/
+    /* clang-format on */
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::add_additional_json_parameterStateAllowed
+	return true;
+}
+
+//--------------------------------------------------------
+/**
+ *	Method      : SlsDetectorControl::is_remove_additional_json_parameter_allowed()
+ * Description:  Execution allowed for remove_additional_json_parameter attribute
+ */
+//--------------------------------------------------------
+bool SlsDetectorControl::is_remove_additional_json_parameter_allowed(TANGO_UNUSED(const CORBA::Any &any))
+{
+	//	Not any excluded states for remove_additional_json_parameter command.
+	/*----- PROTECTED REGION ID(SlsDetectorControl::remove_additional_json_parameterStateAllowed) ENABLED START -----*/
+    /* clang-format on */
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_additional_json_parameterStateAllowed
 	return true;
 }
 

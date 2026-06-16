@@ -640,6 +640,21 @@ public:
 	virtual std::string get_enum_type() {return std::string("timing_modeEnum");}
 };
 
+//	Attribute additional_json_header class definition
+class additional_json_headerAttrib: public Tango::Attr
+{
+public:
+	additional_json_headerAttrib(const std::string &att_name):Attr(att_name.c_str(),
+			Tango::DEV_STRING, Tango::READ_WRITE) {};
+	~additional_json_headerAttrib() {};
+	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
+		{(static_cast<SlsDetectorControl *>(dev))->read_additional_json_header(att);}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<SlsDetectorControl *>(dev))->write_additional_json_header(att);}
+	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
+		{return (static_cast<SlsDetectorControl *>(dev))->is_additional_json_header_allowed(ty);}
+};
+
 //	Attribute threshold_energy class definition
 class threshold_energyAttrib: public Tango::SpectrumAttr
 {
@@ -797,6 +812,52 @@ public:
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<SlsDetectorControl *>(dev))->is_stop_receiver_allowed(any);}
+};
+
+//	Command add_additional_json_parameter class definition
+class add_additional_json_parameterClass : public Tango::Command
+{
+public:
+	add_additional_json_parameterClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out,
+				   const char        *in_desc,
+				   const char        *out_desc,
+				   Tango::DispLevel  level)
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
+
+	add_additional_json_parameterClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out)
+	:Command(cmd_name,in,out)	{};
+	~add_additional_json_parameterClass() {};
+
+	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
+	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
+	{return (static_cast<SlsDetectorControl *>(dev))->is_add_additional_json_parameter_allowed(any);}
+};
+
+//	Command remove_additional_json_parameter class definition
+class remove_additional_json_parameterClass : public Tango::Command
+{
+public:
+	remove_additional_json_parameterClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out,
+				   const char        *in_desc,
+				   const char        *out_desc,
+				   Tango::DispLevel  level)
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
+
+	remove_additional_json_parameterClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out)
+	:Command(cmd_name,in,out)	{};
+	~remove_additional_json_parameterClass() {};
+
+	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
+	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
+	{return (static_cast<SlsDetectorControl *>(dev))->is_remove_additional_json_parameter_allowed(any);}
 };
 
 

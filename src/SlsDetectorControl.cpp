@@ -39,16 +39,18 @@
 //  The following table gives the correspondence
 //  between command and method names.
 //
-//  Command name    |  Method name
+//  Command name                      |  Method name
 //================================================================
-//  start_acquire   |  start_acquire
-//  start_detector  |  start_detector
-//  start_receiver  |  start_receiver
-//  stop_acquire    |  stop_acquire
-//  stop_detector   |  stop_detector
-//  stop_receiver   |  stop_receiver
-//  Status          |  Inherited (no method)
-//  State           |  Inherited (no method)
+//  start_acquire                     |  start_acquire
+//  start_detector                    |  start_detector
+//  start_receiver                    |  start_receiver
+//  stop_acquire                      |  stop_acquire
+//  stop_detector                     |  stop_detector
+//  stop_receiver                     |  stop_receiver
+//  Status                            |  Inherited (no method)
+//  State                             |  Inherited (no method)
+//  add_additional_json_parameter     |  add_additional_json_parameter
+//  remove_additional_json_parameter  |  remove_additional_json_parameter
 //================================================================
 
 //================================================================
@@ -147,8 +149,15 @@ void SlsDetectorControl::delete_device()
         waitpid(receiver_pid, nullptr, 0);
     }
     /* clang-format off */
+    Tango::string_free(*attr_detector_type_read);
+    Tango::string_free(*attr_file_name_read);
+    Tango::string_free(*attr_file_name_prefix_read);
+    Tango::string_free(*attr_file_path_read);
+    Tango::string_free(*attr_hostname_read);
+    Tango::string_free(*attr_package_version_read);
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::delete_device
 	delete[] attr_acquisition_index_read;
+	delete[] attr_detector_type_read;
 	delete[] attr_dynamic_range_read;
 	delete[] attr_exptime_read;
 	delete[] attr_file_name_read;
@@ -190,6 +199,7 @@ void SlsDetectorControl::init_device()
 	get_device_property();
 
 	attr_acquisition_index_read = new Tango::DevLong64[1];
+	attr_detector_type_read = new Tango::DevString[1];
 	attr_dynamic_range_read = new Tango::DevLong[1];
 	attr_exptime_read = new Tango::DevDouble[1];
 	attr_file_name_read = new Tango::DevString[1];
@@ -215,6 +225,12 @@ void SlsDetectorControl::init_device()
 
 	/*----- PROTECTED REGION ID(SlsDetectorControl::init_device) ENABLED START -----*/
     /* clang-format on */
+    *attr_detector_type_read = nullptr;
+    *attr_file_name_read = nullptr;
+    *attr_file_name_prefix_read = nullptr;
+    *attr_file_path_read = nullptr;
+    *attr_hostname_read = nullptr;
+    *attr_package_version_read = nullptr;
     if(startReceiverOnStartup)
     {
 #ifdef SLS_DET_EMBED_RECEIVER
@@ -540,9 +556,9 @@ void SlsDetectorControl::read_detector_type(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_detector_type(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_detector_type) ENABLED START -----*/
     /* clang-format on */
-    attr_detector_type_read = new Tango::DevString;
-    auto detector_type = detector_ptr->getDetectorType().front();
-    *attr_detector_type_read = Tango::string_dup(sls::ToString(detector_type));
+    std::string detector_type = sls::ToString(detector_ptr->getDetectorType().front());
+    Tango::string_free(*attr_detector_type_read);
+    *attr_detector_type_read = Tango::string_dup(detector_type);
     attr.set_value(attr_detector_type_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_detector_type
@@ -654,6 +670,7 @@ void SlsDetectorControl::read_file_name(Tango::Attribute &attr)
     // frames per file but this will be known only during the file writing.
     std::string full_string =
         file_name_prefix + "_d" + std::to_string(module_index) + "_f0_" + std::to_string(file_index);
+    Tango::string_free(*attr_file_name_read);
     *attr_file_name_read = Tango::string_dup(full_string);
     attr.set_value(attr_file_name_read);
     /* clang-format off */
@@ -673,7 +690,9 @@ void SlsDetectorControl::read_file_name_prefix(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_file_name_prefix(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_file_name_prefix) ENABLED START -----*/
     /* clang-format on */
-    *attr_file_name_prefix_read = Tango::string_dup(detector_ptr->getFileNamePrefix().front());
+    std::string file_name_prefix = detector_ptr->getFileNamePrefix().front();
+    Tango::string_free(*attr_file_name_prefix_read);
+    *attr_file_name_prefix_read = Tango::string_dup(file_name_prefix);
     attr.set_value(attr_file_name_prefix_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_file_name_prefix
@@ -753,7 +772,9 @@ void SlsDetectorControl::read_file_path(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_file_path(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_file_path) ENABLED START -----*/
     /* clang-format on */
-    *attr_file_path_read = Tango::string_dup(detector_ptr->getFilePath().front());
+    std::string file_path = detector_ptr->getFilePath().front();
+    Tango::string_free(*attr_file_path_read);
+    *attr_file_path_read = Tango::string_dup(file_path);
     attr.set_value(attr_file_path_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_file_path
@@ -892,7 +913,9 @@ void SlsDetectorControl::read_hostname(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_hostname(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_hostname) ENABLED START -----*/
     /* clang-format on */
-    *attr_hostname_read = Tango::string_dup(detector_ptr->getHostname().front());
+    std::string hostname = detector_ptr->getHostname().front();
+    Tango::string_free(*attr_hostname_read);
+    *attr_hostname_read = Tango::string_dup(hostname);
     attr.set_value(attr_hostname_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_hostname
@@ -1072,7 +1095,9 @@ void SlsDetectorControl::read_package_version(Tango::Attribute &attr)
 	DEBUG_STREAM << "SlsDetectorControl::read_package_version(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(SlsDetectorControl::read_package_version) ENABLED START -----*/
     /* clang-format on */
-    *attr_package_version_read = Tango::string_dup(sls::ToString(detector_ptr->getPackageVersion()));
+    std::string package_version = sls::ToString(detector_ptr->getPackageVersion());
+    Tango::string_free(*attr_package_version_read);
+    *attr_package_version_read = Tango::string_dup(package_version);
     attr.set_value(attr_package_version_read);
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_package_version
@@ -1792,6 +1817,59 @@ void SlsDetectorControl::write_timing_mode(Tango::WAttribute &attr)
 }
 //--------------------------------------------------------
 /**
+ *	Read attribute additional_json_header related method
+ *
+ *
+ *	Data type:	Tango::DevString
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void SlsDetectorControl::read_additional_json_header(Tango::Attribute &attr)
+{
+	DEBUG_STREAM << "SlsDetectorControl::read_additional_json_header(Tango::Attribute &attr) entering... " << std::endl;
+	Tango::DevString	*att_value = get_additional_json_header_data_ptr(attr.get_name());
+	/*----- PROTECTED REGION ID(SlsDetectorControl::read_additional_json_header) ENABLED START -----*/
+    /* clang-format on */
+    std::string parameter_name = remove_prefix(attr.get_name(), "json_");
+    std::string parameter_value = detector_ptr->getAdditionalJsonParameter(parameter_name).front();
+    Tango::string_free(*att_value);
+    *att_value = Tango::string_dup(parameter_value);
+    attr.set_value(att_value);
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::read_additional_json_header
+}
+//--------------------------------------------------------
+/**
+ *	Write attribute additional_json_header related method
+ *
+ *
+ *	Data type:	Tango::DevString
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void SlsDetectorControl::write_additional_json_header(Tango::WAttribute &attr)
+{
+	DEBUG_STREAM << "SlsDetectorControl::write_additional_json_header(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	Tango::DevString	w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(SlsDetectorControl::write_additional_json_header) ENABLED START -----*/
+    /* clang-format on */
+    std::string w_val_str(w_val);
+    if(w_val_str.empty())
+    {
+        Tango::Except::throw_exception("TangoException",
+                                       "Additional JSON header value cannot be empty. To remove the parameter, use the "
+                                       "remove_additional_json_header command.",
+                                       "SlsDetectorControl::write_additional_json_header");
+    }
+    std::string parameter_name = remove_prefix(attr.get_name(), "json_");
+    detector_ptr->setAdditionalJsonParameter(parameter_name, w_val_str);
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::write_additional_json_header
+}
+//--------------------------------------------------------
+/**
  *	Read attribute threshold_energy related method
  *
  *
@@ -1872,6 +1950,7 @@ void SlsDetectorControl::add_dynamic_attributes()
 	//	add_temperature_sodr_dynamic_attribute("Mytemperature_sodrAttribute");
 	//	add_tengiga_dynamic_attribute("MytengigaAttribute");
 	//	add_timing_mode_dynamic_attribute("Mytiming_modeAttribute");
+	//	add_additional_json_header_dynamic_attribute("Myadditional_json_headerAttribute");
 	//	add_threshold_energy_dynamic_attribute("Mythreshold_energyAttribute");
 
 	/*----- PROTECTED REGION ID(SlsDetectorControl::add_dynamic_attributes) ENABLED START -----*/
@@ -1882,6 +1961,13 @@ void SlsDetectorControl::add_dynamic_attributes()
         {
             v.registerFunction(k);
         }
+    }
+
+    auto additional_json_headers = detector_ptr->getAdditionalJsonHeader().front();
+    for(auto &[key, value] : additional_json_headers)
+    {
+        // add "json_" prefix to the attribute name to not overlap with existing attributes
+        add_additional_json_header_dynamic_attribute("json_" + key);
     }
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::add_dynamic_attributes
@@ -2005,6 +2091,93 @@ void SlsDetectorControl::stop_receiver()
     detector_ptr->stopReceiver();
     /* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::stop_receiver
+}
+//--------------------------------------------------------
+/**
+ *	Command add_additional_json_parameter related method
+ *
+ *
+ *	@param argin
+ *	@returns
+ */
+//--------------------------------------------------------
+Tango::DevString SlsDetectorControl::add_additional_json_parameter(const Tango::DevVarStringArray *argin)
+{
+	Tango::DevString argout;
+	DEBUG_STREAM << "SlsDetectorControl::add_additional_json_parameter()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(SlsDetectorControl::add_additional_json_parameter) ENABLED START -----*/
+    /* clang-format on */
+    std::string key((*argin)[0]);
+    std::string value((*argin)[1]);
+    if(key.empty() || value.empty())
+    {
+        Tango::Except::throw_exception("TangoException",
+                                       "Additional JSON header key and value cannot be empty.",
+                                       "SlsDetectorControl::add_additional_json_parameter");
+    }
+    auto additional_json_headers = detector_ptr->getAdditionalJsonHeader().front();
+    if(additional_json_headers.find(key) != additional_json_headers.end())
+    {
+        Tango::Except::throw_exception("TangoException",
+                                       "Additional JSON header with the same key already exists. To update the value, "
+                                       "use the write attribute of the corresponding dynamic attribute.",
+                                       "SlsDetectorControl::add_additional_json_parameter");
+    }
+    else
+    {
+        add_additional_json_header_dynamic_attribute("json_" + key);
+        detector_ptr->setAdditionalJsonParameter(key, value);
+        std::string response = "Additional JSON header parameter \"" + key +
+                               "\" added successfully.\nOpen Jive window again to see changes.";
+        argout = new char[response.length() + 1];
+        std::strcpy(argout, response.c_str());
+    }
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::add_additional_json_parameter
+	return argout;
+}
+//--------------------------------------------------------
+/**
+ *	Command remove_additional_json_parameter related method
+ *
+ *
+ *	@param argin
+ *	@returns
+ */
+//--------------------------------------------------------
+Tango::DevString SlsDetectorControl::remove_additional_json_parameter(Tango::DevString argin)
+{
+	Tango::DevString argout;
+	DEBUG_STREAM << "SlsDetectorControl::remove_additional_json_parameter()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(SlsDetectorControl::remove_additional_json_parameter) ENABLED START -----*/
+    /* clang-format on */
+    std::string key(argin);
+    if(key.empty())
+    {
+        Tango::Except::throw_exception("TangoException",
+                                       "Additional JSON header key cannot be empty.",
+                                       "SlsDetectorControl::remove_additional_json_parameter");
+    }
+    auto additional_json_headers = detector_ptr->getAdditionalJsonHeader().front();
+    if(additional_json_headers.find(key) == additional_json_headers.end())
+    {
+        Tango::Except::throw_exception("TangoException",
+                                       "Additional JSON header with the specified key does not exist.",
+                                       "SlsDetectorControl::remove_additional_json_parameter");
+    }
+    else
+    {
+        remove_additional_json_header_dynamic_attribute("json_" + key);
+        // empty string value is used to remove the parameter in the detector
+        detector_ptr->setAdditionalJsonParameter(key, "");
+        std::string response = "Additional JSON header parameter \"" + key +
+                               "\" removed successfully.\nOpen Jive window again to see changes.";
+        argout = new char[response.length() + 1];
+        std::strcpy(argout, response.c_str());
+    }
+    /* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::remove_additional_json_parameter
+	return argout;
 }
 //--------------------------------------------------------
 /**
@@ -2238,143 +2411,15 @@ void SlsDetectorControl::add_file_format_dynamic_attribute(
     add_attribute(file_format);
 }
 
-/* clang-format off */// //--------------------------------------------------------
-// /**
-//  *	Read attribute scalar_attribute related method
-//  *
-//  *
-//  *	Data type:	Tango::DevBoolean
-//  *	Attr type:	Scalar
-//  */
-// //--------------------------------------------------------
-// void SlsDetectorControl::read_scalar_attribute(Tango::Attribute &attr)
-// {
-// 	DEBUG_STREAM << "SlsDetectorControl::read_scalar_attribute(Tango::Attribute &attr) entering... " << std::endl;
-// 	/* clang-format on */
-// 	//	Set the attribute value
-// 	attr.set_value(attr_scalar_attribute_read);
-// 	/* clang-format off */
-// }
+std::string SlsDetectorControl::remove_prefix(std::string str, std::string prefix)
+{
+    if(str.find(prefix) == 0) // starts at position 0
+    {
+        str.erase(0, prefix.length());
+    }
+    return str;
+}
 
-// //--------------------------------------------------------
-// /**
-//  *	Write attribute scalar_attribute related method
-//  *
-//  *
-//  *	Data type:	Tango::DevBoolean
-//  *	Attr type:	Scalar
-//  */
-// //--------------------------------------------------------
-// void SlsDetectorControl::write_scalar_attribute(Tango::WAttribute &attr)
-// {
-// 	DEBUG_STREAM << "SlsDetectorControl::write_scalar_attribute(Tango::WAttribute &attr) entering... " << std::endl;
-// 	//	Retrieve write value
-// 	Tango::DevBoolean	w_val;
-// 	attr.get_write_value(w_val);
-// 	/* clang-format on */
-// 	//	Add your own code
-// 	/* clang-format off */
-// }
-
-// //--------------------------------------------------------
-// /**
-//  *	Read attribute file_format related method
-//  *
-//  *
-//  *	Data type:	Tango::DevEnum (file_formatEnum)
-//  *	Attr type:	Scalar
-//  */
-// //--------------------------------------------------------
-// void SlsDetectorControl::read_file_format(Tango::Attribute &attr)
-// {
-// 	DEBUG_STREAM << "SlsDetectorControl::read_file_format(Tango::Attribute &attr) entering... " << std::endl;
-// 	/* clang-format on */
-// 	//	Set the attribute value
-// 	attr.set_value(attr_file_format_read);
-// 	/* clang-format off */
-// }
-
-// //--------------------------------------------------------
-// /**
-//  *	Write attribute file_format related method
-//  *
-//  *
-//  *	Data type:	Tango::DevEnum (file_formatEnum)
-//  *	Attr type:	Scalar
-//  */
-// //--------------------------------------------------------
-// void SlsDetectorControl::write_file_format(Tango::WAttribute &attr)
-// {
-// 	DEBUG_STREAM << "SlsDetectorControl::write_file_format(Tango::WAttribute &attr) entering... " << std::endl;
-// 	//	Retrieve write value
-// 	file_formatEnum	w_val;
-// 	attr.get_write_value(w_val);
-// 	/* clang-format on */
-// 	//	Add your own code
-// 	/* clang-format off */
-// }
-
-// //--------------------------------------------------------
-// /**
-//  *	Read attribute full_file_name related method
-//  *
-//  *
-//  *	Data type:	Tango::DevString
-//  *	Attr type:	Scalar
-//  */
-// //--------------------------------------------------------
-// void SlsDetectorControl::read_full_file_name(Tango::Attribute &attr)
-// {
-// 	DEBUG_STREAM << "SlsDetectorControl::read_full_file_name(Tango::Attribute &attr) entering... " << std::endl;
-//     /* clang-format on */
-// 	// build string
-// 	// default run File Name: [file name prefix]_d[module index]_f[file index]_[acquisition index].[file format] eg. run_d0_f0_5.raw
-// 	std::string file_name_prefix = detector_ptr->getFileNamePrefix().front();
-// 	int module_index = 0;
-// 	auto file_index = detector_ptr->getAcquisitionIndex().front();
-// 	auto file_format = detector_ptr->getFileFormat().front();
-// 	std::string full_string = file_name_prefix + "_d" + std::to_string(module_index) + "_f" + std::to_string(file_index) + "_" + std::to_string(file_format);
-// 	*attr_full_file_name_read = Tango::string_dup(full_string);
-// 	attr.set_value(attr_full_file_name_read);
-//     /* clang-format off */
-// }
-
-// //--------------------------------------------------------
-// /**
-//  *	Read attribute detector_status related method
-//  *
-//  *
-//  *	Data type:	Tango::DevEnum (detector_statusEnum)
-//  *	Attr type:	Scalar
-//  */
-// //--------------------------------------------------------
-// void SlsDetectorControl::read_detector_status(Tango::Attribute &attr)
-// {
-// 	DEBUG_STREAM << "SlsDetectorControl::read_detector_status(Tango::Attribute &attr) entering... " << std::endl;
-// 	/* clang-format on */
-// 	//	Set the attribute value
-// 	attr.set_value(attr_detector_status_read);
-// 	/* clang-format off */
-// }
-
-// //--------------------------------------------------------
-// /**
-//  *	Read attribute receiver_status related method
-//  *
-//  *
-//  *	Data type:	Tango::DevEnum (receiver_statusEnum)
-//  *	Attr type:	Scalar
-//  */
-// //--------------------------------------------------------
-// void SlsDetectorControl::read_receiver_status(Tango::Attribute &attr)
-// {
-// 	DEBUG_STREAM << "SlsDetectorControl::read_receiver_status(Tango::Attribute &attr) entering... " << std::endl;
-// 	/* clang-format on */
-// 	//	Set the attribute value
-// 	attr.set_value(attr_receiver_status_read);
-// 	/* clang-format off */
-// }
-
-
+/* clang-format off */
 /*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::namespace_ending
 } //	namespace

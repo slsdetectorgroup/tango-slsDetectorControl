@@ -973,6 +973,21 @@ public:
 	map<std::string,Tango::DevEnum>	   timing_mode_data;
 
 	/**
+	 *	Attribute additional_json_header related methods
+	 *
+	 *
+	 *	Data type:  Tango::DevString
+	 *	Attr type:	Scalar
+	 */
+	virtual void read_additional_json_header(Tango::Attribute &attr);
+	virtual void write_additional_json_header(Tango::WAttribute &attr);
+	virtual bool is_additional_json_header_allowed(Tango::AttReqType type);
+	void add_additional_json_header_dynamic_attribute(std::string attname);
+	void remove_additional_json_header_dynamic_attribute(std::string attname);
+	Tango::DevString *get_additional_json_header_data_ptr(std::string &name);
+	map<std::string,Tango::DevString>	   additional_json_header_data;
+
+	/**
 	 *	Attribute threshold_energy related methods
 	 *
 	 *
@@ -1042,6 +1057,24 @@ public:
 	 */
 	virtual void stop_receiver();
 	virtual bool is_stop_receiver_allowed(const CORBA::Any &any);
+	/**
+	 *	Command add_additional_json_parameter related method
+	 *
+	 *
+	 *	@param argin
+	 *	@returns
+	 */
+	virtual Tango::DevString add_additional_json_parameter(const Tango::DevVarStringArray *argin);
+	virtual bool is_add_additional_json_parameter_allowed(const CORBA::Any &any);
+	/**
+	 *	Command remove_additional_json_parameter related method
+	 *
+	 *
+	 *	@param argin
+	 *	@returns
+	 */
+	virtual Tango::DevString remove_additional_json_parameter(Tango::DevString argin);
+	virtual bool is_remove_additional_json_parameter_allowed(const CORBA::Any &any);
 
 //	Dynamic commands methods
 public:
@@ -1079,7 +1112,8 @@ public:
                                            std::unique_ptr<SlsTangoEnumAdapter<timingMode>> &slsEnumAdapter_ptr);
     void add_file_format_dynamic_attribute(std::string attname,
                                            std::unique_ptr<SlsTangoEnumAdapter<fileFormat>> &slsEnumAdapter_ptr);
-
+    void add_additional_json_parameter_dynamic_attribute(std::string attname);
+    std::string remove_prefix(std::string str, std::string prefix);
     /* clang-format off */
 /*----- PROTECTED REGION END -----*/	//	SlsDetectorControl::Additional Method prototypes
 };

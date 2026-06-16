@@ -254,6 +254,44 @@ CORBA::Any *stop_receiverClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(
 
 //--------------------------------------------------------
 /**
+ * method : 		add_additional_json_parameterClass::execute()
+ * description : 	method to trigger the execution of the command.
+ *
+ * @param	device	The device on which the command must be executed
+ * @param	in_any	The command input data
+ *
+ *	returns The command output data (packed in the Any object)
+ */
+//--------------------------------------------------------
+CORBA::Any *add_additional_json_parameterClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
+{
+	TANGO_LOG_INFO << "add_additional_json_parameterClass::execute(): arrived" << std::endl;
+	const Tango::DevVarStringArray *argin;
+	extract(in_any, argin);
+	return insert((static_cast<SlsDetectorControl *>(device))->add_additional_json_parameter(argin));
+}
+
+//--------------------------------------------------------
+/**
+ * method : 		remove_additional_json_parameterClass::execute()
+ * description : 	method to trigger the execution of the command.
+ *
+ * @param	device	The device on which the command must be executed
+ * @param	in_any	The command input data
+ *
+ *	returns The command output data (packed in the Any object)
+ */
+//--------------------------------------------------------
+CORBA::Any *remove_additional_json_parameterClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
+{
+	TANGO_LOG_INFO << "remove_additional_json_parameterClass::execute(): arrived" << std::endl;
+	Tango::DevString argin;
+	extract(in_any, argin);
+	return insert((static_cast<SlsDetectorControl *>(device))->remove_additional_json_parameter(argin));
+}
+
+//--------------------------------------------------------
+/**
  * method : 		load_trimbitsClass::execute()
  * description : 	method to trigger the execution of the command.
  *
@@ -1122,6 +1160,24 @@ void SlsDetectorControlClass::command_factory()
 	command_list.push_back(pstop_receiverCmd);
 
 
+
+	//	Command add_additional_json_parameter
+	add_additional_json_parameterClass	*padd_additional_json_parameterCmd =
+		new add_additional_json_parameterClass("add_additional_json_parameter",
+			Tango::DEVVAR_STRINGARRAY, Tango::DEV_STRING,
+			"",
+			"",
+			Tango::OPERATOR);
+	command_list.push_back(padd_additional_json_parameterCmd);
+
+	//	Command remove_additional_json_parameter
+	remove_additional_json_parameterClass	*premove_additional_json_parameterCmd =
+		new remove_additional_json_parameterClass("remove_additional_json_parameter",
+			Tango::DEV_STRING, Tango::DEV_STRING,
+			"",
+			"",
+			Tango::OPERATOR);
+	command_list.push_back(premove_additional_json_parameterCmd);
 
 	/*----- PROTECTED REGION ID(SlsDetectorControlClass::command_factory_after) ENABLED START -----*/
     /* clang-format on */
