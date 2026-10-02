@@ -1021,7 +1021,7 @@ void SlsDetectorControlClass::attribute_factory(std::vector<Tango::Attr *> &att_
 	Tango::UserDefaultAttrProp	temperature_fpga_prop;
 	//	description	not set for temperature_fpga
 	//	label	not set for temperature_fpga
-	temperature_fpga_prop.set_unit("°C");
+	temperature_fpga_prop.set_unit("degC");
 	//	standard_unit	not set for temperature_fpga
 	//	display_unit	not set for temperature_fpga
 	//	format	not set for temperature_fpga

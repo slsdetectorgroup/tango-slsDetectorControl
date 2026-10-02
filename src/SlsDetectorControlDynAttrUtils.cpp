@@ -86,7 +86,7 @@ void SlsDetectorControl::add_adc_phase_dynamic_attribute(std::string attname)
 	Tango::UserDefaultAttrProp	adc_phase_prop;
 	//	description	not set for adc_phase
 	//	label	not set for adc_phase
-	adc_phase_prop.set_unit("�");
+	adc_phase_prop.set_unit("deg");
 	//	standard_unit	not set for adc_phase
 	//	display_unit	not set for adc_phase
 	//	format	not set for adc_phase
@@ -736,7 +736,7 @@ void SlsDetectorControl::add_temperature_adc_dynamic_attribute(std::string attna
 	Tango::UserDefaultAttrProp	temperature_adc_prop;
 	//	description	not set for temperature_adc
 	//	label	not set for temperature_adc
-	temperature_adc_prop.set_unit("�C");
+	temperature_adc_prop.set_unit("degC");
 	//	standard_unit	not set for temperature_adc
 	//	display_unit	not set for temperature_adc
 	//	format	not set for temperature_adc
@@ -795,7 +795,7 @@ void SlsDetectorControl::add_temperature_dcdc_dynamic_attribute(std::string attn
 	Tango::UserDefaultAttrProp	temperature_dcdc_prop;
 	//	description	not set for temperature_dcdc
 	//	label	not set for temperature_dcdc
-	temperature_dcdc_prop.set_unit("�C");
+	temperature_dcdc_prop.set_unit("degC");
 	//	standard_unit	not set for temperature_dcdc
 	//	display_unit	not set for temperature_dcdc
 	//	format	not set for temperature_dcdc
@@ -854,7 +854,7 @@ void SlsDetectorControl::add_temperature_fpga2_dynamic_attribute(std::string att
 	Tango::UserDefaultAttrProp	temperature_fpga2_prop;
 	//	description	not set for temperature_fpga2
 	//	label	not set for temperature_fpga2
-	temperature_fpga2_prop.set_unit("�C");
+	temperature_fpga2_prop.set_unit("degC");
 	//	standard_unit	not set for temperature_fpga2
 	//	display_unit	not set for temperature_fpga2
 	//	format	not set for temperature_fpga2
@@ -913,7 +913,7 @@ void SlsDetectorControl::add_temperature_fpga3_dynamic_attribute(std::string att
 	Tango::UserDefaultAttrProp	temperature_fpga3_prop;
 	//	description	not set for temperature_fpga3
 	//	label	not set for temperature_fpga3
-	temperature_fpga3_prop.set_unit("�C");
+	temperature_fpga3_prop.set_unit("degC");
 	//	standard_unit	not set for temperature_fpga3
 	//	display_unit	not set for temperature_fpga3
 	//	format	not set for temperature_fpga3
@@ -972,7 +972,7 @@ void SlsDetectorControl::add_temperature_fpgaext_dynamic_attribute(std::string a
 	Tango::UserDefaultAttrProp	temperature_fpgaext_prop;
 	//	description	not set for temperature_fpgaext
 	//	label	not set for temperature_fpgaext
-	temperature_fpgaext_prop.set_unit("�C");
+	temperature_fpgaext_prop.set_unit("degC");
 	//	standard_unit	not set for temperature_fpgaext
 	//	display_unit	not set for temperature_fpgaext
 	//	format	not set for temperature_fpgaext
@@ -1031,7 +1031,7 @@ void SlsDetectorControl::add_temperature_sodl_dynamic_attribute(std::string attn
 	Tango::UserDefaultAttrProp	temperature_sodl_prop;
 	//	description	not set for temperature_sodl
 	//	label	not set for temperature_sodl
-	temperature_sodl_prop.set_unit("�C");
+	temperature_sodl_prop.set_unit("degC");
 	//	standard_unit	not set for temperature_sodl
 	//	display_unit	not set for temperature_sodl
 	//	format	not set for temperature_sodl
@@ -1090,7 +1090,7 @@ void SlsDetectorControl::add_temperature_sodr_dynamic_attribute(std::string attn
 	Tango::UserDefaultAttrProp	temperature_sodr_prop;
 	//	description	not set for temperature_sodr
 	//	label	not set for temperature_sodr
-	temperature_sodr_prop.set_unit("�C");
+	temperature_sodr_prop.set_unit("degC");
 	//	standard_unit	not set for temperature_sodr
 	//	display_unit	not set for temperature_sodr
 	//	format	not set for temperature_sodr
